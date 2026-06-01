@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happiness in the Digital Age</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:#0a0a0a;
+    color:#ffffff;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    position:relative;
+}
+
+/* Background Glow */
+body::before{
+    content:'';
+    position:absolute;
+    width:800px;
+    height:800px;
+    background:radial-gradient(circle,
+    rgba(0,255,194,0.15) 0%,
+    rgba(0,255,194,0.05) 30%,
+    transparent 70%);
+    filter:blur(50px);
+    z-index:0;
+}
+
+.container{
+    position:relative;
+    z-index:1;
+    text-align:center;
+    max-width:900px;
+    padding:40px;
+}
+
+.logo{
+    font-size:14px;
+    letter-spacing:6px;
+    text-transform:uppercase;
+    color:#00FFC2;
+    margin-bottom:30px;
+}
+
+h1{
+    font-size:clamp(3rem,8vw,6rem);
+    font-weight:700;
+    line-height:1;
+    margin-bottom:25px;
+}
+
+.highlight{
+    color:#00FFC2;
+}
+
+p{
+    font-size:1.2rem;
+    color:#b5b5b5;
+    max-width:650px;
+    margin:0 auto 40px;
+    line-height:1.8;
+}
+
+.soon{
+    display:inline-block;
+    padding:14px 34px;
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:999px;
+    font-size:14px;
+    letter-spacing:4px;
+    text-transform:uppercase;
+    background:rgba(255,255,255,0.03);
+    backdrop-filter:blur(10px);
+}
+
+footer{
+    position:absolute;
+    bottom:30px;
+    width:100%;
+    text-align:center;
+    color:#666;
+    font-size:12px;
+    letter-spacing:2px;
+}
+
+@media(max-width:768px){
+    p{
+        font-size:1rem;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="logo">
+        Happiness in the Digital Age
+    </div>
+
+    <h1>
+        Rediscover <span class="highlight">Meaning</span><br>
+        in a Connected World
+    </h1>
+
+    <p>
+        Exploring happiness, technology, human connection,
+        and the future of well-being in the digital age.
+        A new documentary experience is coming soon.
+    </p>
+
+    <div class="soon">
+        Coming Soon
+    </div>
+
+</div>
+
+<footer>
+    © 2026 • Happiness in the Digital Age
+</footer>
+
+</body>
+</html>
