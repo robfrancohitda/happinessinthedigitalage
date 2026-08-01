@@ -49,7 +49,7 @@ const articles = defineCollection({
       .array(
         z.object({
           title: z.string().min(2).max(200),
-          url: z.string().url(),
+          url: z.url(),
         }),
       )
       .default([]),
