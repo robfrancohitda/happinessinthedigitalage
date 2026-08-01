@@ -1,0 +1,126 @@
+---
+import { commercialPlacements } from '../../lib/commercial';
+
+type Placement = (typeof commercialPlacements)[number];
+
+interface Props {
+  href: string;
+  headline: string;
+  body: string;
+  cta?: string;
+  label?: string;
+  image?: string;
+  imageAlt?: string;
+  productId?: string;
+  campaignId?: string;
+  articleId?: string;
+  placement?: Placement;
+}
+
+const {
+  href,
+  headline,
+  body,
+  cta = 'See details',
+  label = 'Advertisement',
+  image,
+  imageAlt = '',
+  productId,
+  campaignId,
+  articleId,
+  placement = 'article-midpoint',
+} = Astro.props;
+---
+
+<aside
+  class="affiliate-banner"
+  aria-label={label}
+  data-commercial-impression="banner_impression"
+  data-product-id={productId}
+  data-campaign-id={campaignId}
+  data-article-id={articleId}
+  data-placement={placement}
+>
+  <small class="affiliate-banner__label">{label}</small>
+
+  <div class="affiliate-banner__body">
+    {
+      image && (
+        <img
+          class="affiliate-banner__image"
+          src={image}
+          alt={imageAlt}
+          loading="lazy"
+          decoding="async"
+        />
+      )
+    }
+
+    <div class="affiliate-banner__content">
+      <strong>{headline}</strong>
+      <p>{body}</p>
+
+      <a
+        href={href}
+        target="_blank"
+        rel="sponsored noopener noreferrer"
+        data-commercial-track="banner_click"
+        data-product-id={productId}
+        data-campaign-id={campaignId}
+        data-article-id={articleId}
+        data-placement={placement}
+      >
+        {cta}
+      </a>
+    </div>
+  </div>
+</aside>
+
+<style>
+  .affiliate-banner {
+    margin-block: 2rem;
+    padding: 0.75rem;
+    border: 1px solid var(--color-border, #d9dde3);
+    border-radius: 0.75rem;
+    background: var(--color-surface-muted, #f5f6f8);
+  }
+
+  .affiliate-banner__label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--color-muted, #5f6875);
+    font-size: 0.7rem;
+  }
+
+  .affiliate-banner__body {
+    display: grid;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .affiliate-banner__image {
+    width: 100%;
+    max-height: 220px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+  }
+
+  .affiliate-banner__content strong {
+    display: block;
+    font-size: 1.15rem;
+  }
+
+  .affiliate-banner__content p {
+    margin-block: 0.5rem 0.75rem;
+  }
+
+  .affiliate-banner__content a {
+    font-weight: 700;
+  }
+
+  @media (min-width: 700px) {
+    .affiliate-banner__body:has(.affiliate-banner__image) {
+      grid-template-columns: minmax(180px, 0.4fr) minmax(0, 1fr);
+    }
+  }
+</style>

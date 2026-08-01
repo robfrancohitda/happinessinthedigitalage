@@ -1,0 +1,133 @@
+---
+import { commercialPlacements } from '../../lib/commercial';
+
+type Placement = (typeof commercialPlacements)[number];
+
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+  cta?: string;
+  eyebrow?: string;
+  disclosure?: string;
+  image?: string;
+  imageAlt?: string;
+  productId?: string;
+  campaignId?: string;
+  articleId?: string;
+  placement?: Placement;
+}
+
+const {
+  href,
+  title,
+  description,
+  cta = 'Learn more',
+  eyebrow = 'Recommended resource',
+  disclosure = 'Paid link',
+  image,
+  imageAlt = '',
+  productId,
+  campaignId,
+  articleId,
+  placement = 'article-inline',
+} = Astro.props;
+---
+
+<aside
+  class="product-callout"
+  aria-label={eyebrow}
+  data-commercial-impression="product_callout_view"
+  data-product-id={productId}
+  data-campaign-id={campaignId}
+  data-article-id={articleId}
+  data-placement={placement}
+>
+  {
+    image && (
+      <img
+        class="product-callout__image"
+        src={image}
+        alt={imageAlt}
+        loading="lazy"
+        decoding="async"
+      />
+    )
+  }
+
+  <div class="product-callout__content">
+    <p class="product-callout__eyebrow">{eyebrow}</p>
+    <h3>{title}</h3>
+    <p>{description}</p>
+
+    <a
+      class="product-callout__cta"
+      href={href}
+      target="_blank"
+      rel="sponsored noopener noreferrer"
+      data-commercial-track="product_callout_click"
+      data-product-id={productId}
+      data-campaign-id={campaignId}
+      data-article-id={articleId}
+      data-placement={placement}
+    >
+      {cta}
+    </a>
+
+    <small class="product-callout__disclosure">{disclosure}</small>
+  </div>
+</aside>
+
+<style>
+  .product-callout {
+    display: grid;
+    gap: 1rem;
+    margin-block: 2rem;
+    padding: 1.25rem;
+    border: 1px solid var(--color-border, #d9dde3);
+    border-radius: 0.75rem;
+    background: var(--color-surface, #fff);
+  }
+
+  .product-callout__image {
+    width: 100%;
+    max-height: 240px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+  }
+
+  .product-callout__content > * {
+    margin-top: 0;
+  }
+
+  .product-callout__eyebrow,
+  .product-callout__disclosure {
+    color: var(--color-muted, #5f6875);
+    font-size: 0.75rem;
+  }
+
+  .product-callout__eyebrow {
+    margin-bottom: 0.35rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .product-callout__cta {
+    display: inline-flex;
+    margin-top: 0.5rem;
+    font-weight: 700;
+  }
+
+  .product-callout__disclosure {
+    display: block;
+    margin-top: 0.65rem;
+  }
+
+  @media (min-width: 700px) {
+    .product-callout:has(.product-callout__image) {
+      grid-template-columns: minmax(160px, 0.4fr) minmax(0, 1fr);
+      align-items: center;
+    }
+  }
+</style>

@@ -1,0 +1,33 @@
+---
+interface Props {
+  href: string;
+  productId?: string;
+  campaignId?: string;
+  articleId?: string;
+  placement?: string;
+  ariaLabel?: string;
+}
+
+const {
+  href,
+  productId,
+  campaignId,
+  articleId,
+  placement = 'article-inline',
+  ariaLabel,
+} = Astro.props;
+---
+
+<a
+  href={href}
+  target="_blank"
+  rel="sponsored noopener noreferrer"
+  aria-label={ariaLabel}
+  data-commercial-track="affiliate_click"
+  data-product-id={productId}
+  data-campaign-id={campaignId}
+  data-article-id={articleId}
+  data-placement={placement}
+>
+  <slot />
+</a>

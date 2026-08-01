@@ -1,0 +1,95 @@
+---
+import { getCollection } from 'astro:content';
+
+import AffiliateBanner from '../affiliate/AffiliateBanner.astro';
+import { commercialPlacements } from '../../lib/commercial';
+import { selectCampaign } from '../../lib/campaign-selection';
+
+type Placement = (typeof commercialPlacements)[number];
+
+interface Props {
+  placement: Placement;
+  articleId?: string;
+  vertical?: string;
+  category?: string;
+  topic?: string;
+  preferredCampaignIds?: string[];
+  allowGlobalCampaigns?: boolean;
+}
+
+const {
+  placement,
+  articleId,
+  vertical,
+  category,
+  topic,
+  preferredCampaignIds = [],
+  allowGlobalCampaigns = true,
+} = Astro.props;
+
+const campaigns = await getCollection('campaigns');
+
+const campaign = selectCampaign(campaigns, {
+  placement,
+  articleId,
+  vertical,
+  category,
+  topic,
+  preferredCampaignIds,
+  allowGlobalCampaigns,
+});
+---
+
+{
+  campaign?.data.kind === 'programmatic' ? (
+    <aside
+      class="ad-slot ad-slot--programmatic"
+      aria-label={campaign.data.disclosureLabel}
+      data-programmatic-slot={placement}
+      data-commercial-impression="banner_impression"
+      data-campaign-id={campaign.id}
+      data-campaign-kind={campaign.data.kind}
+      data-article-id={articleId}
+      data-placement={placement}
+    >
+      <small>{campaign.data.disclosureLabel}</small>
+      <div class="ad-slot__provider-container"></div>
+    </aside>
+  ) : campaign ? (
+    <AffiliateBanner
+      href={campaign.data.destinationUrl}
+      headline={campaign.data.creative.headline}
+      body={campaign.data.creative.body}
+      cta={campaign.data.creative.cta}
+      label={campaign.data.disclosureLabel}
+      image={campaign.data.creative.image}
+      imageAlt={campaign.data.creative.alt}
+      productId={campaign.data.productId}
+      campaignId={campaign.id}
+      articleId={articleId}
+      placement={placement}
+    />
+  ) : null
+}
+
+<style>
+  .ad-slot--programmatic {
+    margin-block: 2rem;
+    min-height: 90px;
+    padding: 0.75rem;
+    border: 1px solid var(--color-border, #d9dde3);
+    border-radius: 0.75rem;
+    background: var(--color-surface-muted, #f5f6f8);
+  }
+
+  .ad-slot--programmatic small {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--color-muted, #5f6875);
+    font-size: 0.7rem;
+  }
+
+  .ad-slot__provider-container {
+    min-height: 60px;
+  }
+</style>

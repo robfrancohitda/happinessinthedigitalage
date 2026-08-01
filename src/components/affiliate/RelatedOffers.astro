@@ -1,0 +1,71 @@
+---
+import { getCollection } from 'astro:content';
+
+import ProductCallout from './ProductCallout.astro';
+import { commercialPlacements } from '../../lib/commercial';
+
+type Placement = (typeof commercialPlacements)[number];
+
+interface Props {
+  productIds: string[];
+  articleId?: string;
+  heading?: string;
+  placement?: Placement;
+}
+
+const {
+  productIds,
+  articleId,
+  heading = 'Related resources',
+  placement = 'article-after-content',
+} = Astro.props;
+
+const products = (await getCollection('products'))
+  .filter(
+    (product) =>
+      product.data.status === 'active' &&
+      productIds.includes(product.id),
+  )
+  .sort(
+    (first, second) =>
+      productIds.indexOf(first.id) -
+      productIds.indexOf(second.id),
+  );
+---
+
+{
+  products.length > 0 && (
+    <section
+      class="related-offers"
+      aria-label={heading}
+    >
+      <h2>{heading}</h2>
+
+      {products.map((product) => (
+        <ProductCallout
+          href={product.data.destinationUrl}
+          title={product.data.name}
+          description={product.data.publicSummary}
+          cta="Learn more"
+          eyebrow="Related resource"
+          disclosure={
+            product.data.disclosureText ?? 'Paid link'
+          }
+          productId={product.id}
+          articleId={articleId}
+          placement={placement}
+        />
+      ))}
+    </section>
+  )
+}
+
+<style>
+  .related-offers {
+    margin-block: 3rem;
+  }
+
+  .related-offers > h2 {
+    margin-bottom: 1rem;
+  }
+</style>
