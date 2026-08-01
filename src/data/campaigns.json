@@ -1,0 +1,24 @@
+{
+  "_technical-campaign-check": {
+    "name": "Technical placeholder campaign",
+    "status": "draft",
+    "kind": "house",
+    "productId": "_technical-product-check",
+    "destinationUrl": "https://www.happinessinthedigitalage.digital/",
+    "priority": 0,
+    "relationship": "house",
+    "placements": ["article-after-content"],
+    "targeting": {
+      "verticals": ["digital-life"],
+      "categories": ["technical-foundation"],
+      "topics": ["commercial-architecture"],
+      "excludedArticleIds": []
+    },
+    "creative": {
+      "headline": "Technical campaign validation",
+      "body": "Internal draft creative used only to validate the campaign architecture.",
+      "cta": "Technical check"
+    },
+    "disclosureLabel": "Advertisement"
+  }
+}

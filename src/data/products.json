@@ -1,0 +1,18 @@
+{
+  "_technical-product-check": {
+    "name": "Technical placeholder product",
+    "status": "draft",
+    "network": "internal",
+    "vendor": "Happiness in the Digital Age",
+    "publicSummary": "Internal draft record used only to validate the HITDA product and affiliate data architecture.",
+    "destinationUrl": "https://www.happinessinthedigitalage.digital/",
+    "verticals": ["digital-life"],
+    "categories": ["technical-foundation"],
+    "topics": ["commercial-architecture"],
+    "audience": ["Internal technical validation only"],
+    "benefits": ["Validates structured product fields before real offers are added"],
+    "cautions": ["This record must never be activated or displayed publicly"],
+    "disclosureText": "Advertisement",
+    "creativeIds": []
+  }
+}
