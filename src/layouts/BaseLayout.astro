@@ -1,0 +1,53 @@
+---
+import SeoHead from '../components/seo/SeoHead.astro';
+import SiteFooter from '../components/site/SiteFooter.astro';
+import SiteHeader from '../components/site/SiteHeader.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  image,
+  noindex = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+
+    <SeoHead
+      title={title}
+      description={description}
+      canonical={canonical}
+      image={image}
+      noindex={noindex}
+    />
+  </head>
+
+  <body>
+    <div class="site-shell">
+      <SiteHeader />
+
+      <main>
+        <slot />
+      </main>
+
+      <SiteFooter />
+    </div>
+  </body>
+</html>

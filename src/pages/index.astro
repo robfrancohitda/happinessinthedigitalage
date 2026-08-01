@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = 'Happiness in the Digital Age';
+const description =
+  'Practical ways to live, work and choose better in a digital world.';
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="technical-hero">
+    <div class="technical-hero__content">
+      <p class="eyebrow">Independent editorial publication</p>
+
+      <h1>Happiness in the Digital Age</h1>
+
+      <p class="technical-hero__summary">
+        Practical ways to live, work and choose better in a digital world.
+      </p>
+
+      <div class="technical-notice">
+        <strong>Technical foundation in development.</strong>
+        <span>
+          The final editorial architecture, visual identity and commercial
+          system will be implemented in later modules.
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <section class="foundation-section" aria-labelledby="foundation-title">
+    <div class="section-heading">
+      <p class="eyebrow">Initial architecture</p>
+      <h2 id="foundation-title">
+        Built as an independent, static and performance-focused publication
+      </h2>
+    </div>
+
+    <div class="foundation-grid">
+      <article>
+        <h3>Editorial foundation</h3>
+        <p>
+          Structured content, semantic HTML and a controlled publishing
+          workflow.
+        </p>
+      </article>
+
+      <article>
+        <h3>Commercial separation</h3>
+        <p>
+          Affiliate recommendations, programmatic advertising and editorial
+          content will remain technically distinct.
+        </p>
+      </article>
+
+      <article>
+        <h3>Performance first</h3>
+        <p>
+          Static generation, minimal JavaScript and optimized assets as the
+          default.
+        </p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
