@@ -1,15 +1,49 @@
 ---
 const year = new Date().getFullYear();
+
+const navigation = [
+  { href: '/#topics', label: 'Topics' },
+  { href: '/#latest', label: 'Latest' },
+  { href: '/#what-to-expect', label: 'What to expect' },
+];
 ---
 
 <footer class="site-footer">
   <div class="site-footer__inner">
-    <p>
-      Practical ways to live, work and choose better in a digital world.
-    </p>
+    <div class="site-footer__identity">
+      <a class="site-footer__brand" href="/">
+        Happiness in the Digital Age
+      </a>
+
+      <p>
+        Practical guidance for living, working and choosing better in
+        a changing world.
+      </p>
+    </div>
+
+    <nav class="site-footer__navigation" aria-label="Footer navigation">
+      <p class="site-footer__heading">Navigate</p>
+
+      {
+        navigation.map((item) => (
+          <a href={item.href}>{item.label}</a>
+        ))
+      }
+    </nav>
+
+    <div class="site-footer__information">
+      <p class="site-footer__heading">Information</p>
+      <a href="/sitemap-index.xml">Sitemap</a>
+      <a href="/robots.txt">Robots</a>
+    </div>
+  </div>
+
+  <div class="site-footer__legal">
+    <p>© {year} Happiness in the Digital Age.</p>
 
     <p>
-      © {year} Happiness in the Digital Age.
+      Some pages may contain paid links. Editorial decisions remain
+      independent.
     </p>
   </div>
 </footer>

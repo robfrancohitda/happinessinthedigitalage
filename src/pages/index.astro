@@ -1,62 +1,215 @@
 ---
+import {
+  getCollection,
+  type CollectionEntry,
+} from 'astro:content';
+
+import ArticleCard from '../components/editorial/ArticleCard.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/home.css';
 
 const title = 'Happiness in the Digital Age';
 const description =
-  'Practical ways to live, work and choose better in a digital world.';
+  'Practical guidance on wellbeing, health, money, work, relationships and technology for better everyday decisions.';
+
+const topicAreas = [
+  {
+    name: 'Wellbeing',
+    description:
+      'Stress, sleep, focus, emotional balance and the habits that support a steadier life.',
+  },
+  {
+    name: 'Health & Nutrition',
+    description:
+      'Everyday health choices, food, supplements and claims examined with appropriate care.',
+  },
+  {
+    name: 'Work & Money',
+    description:
+      'Practical decisions about productivity, income, digital work, spending and financial tools.',
+  },
+  {
+    name: 'Relationships & Home',
+    description:
+      'Communication, family life, routines and the small systems that make daily life work better.',
+  },
+  {
+    name: 'Technology & Digital Life',
+    description:
+      'AI, privacy, attention, devices and digital tools explained in human terms.',
+  },
+];
+
+const publishedArticles = (
+  await getCollection('articles', ({ data }) => !data.draft)
+)
+  .sort((first, second) => {
+    const firstDate = first.data.updatedAt ?? first.data.publishedAt;
+    const secondDate = second.data.updatedAt ?? second.data.publishedAt;
+
+    return secondDate.getTime() - firstDate.getTime();
+  })
+  .slice(0, 6);
+
+const routeByType = {
+  guide: 'guides',
+  explainer: 'explainers',
+  review: 'reviews',
+  comparison: 'comparisons',
+  resource: 'resources',
+} as const;
+
+function getArticlePath(
+  article: CollectionEntry<'articles'>,
+): string {
+  return `/${routeByType[article.data.contentType]}/${article.id}/`;
+}
 ---
 
 <BaseLayout title={title} description={description}>
-  <section class="technical-hero">
-    <div class="technical-hero__content">
-      <p class="eyebrow">Independent editorial publication</p>
+  <section class="home-hero">
+    <div class="home-hero__content">
+      <p class="eyebrow">Practical guidance for everyday life</p>
 
-      <h1>Happiness in the Digital Age</h1>
+      <h1>
+        Live better in a world that keeps changing.
+      </h1>
 
-      <p class="technical-hero__summary">
-        Practical ways to live, work and choose better in a digital world.
+      <p class="home-hero__summary">
+        Clear, useful guidance on wellbeing, health, money, work,
+        relationships and technology—so you can understand your options
+        and make decisions with more confidence.
       </p>
 
-      <div class="technical-notice">
-        <strong>Technical foundation in development.</strong>
-        <span>
-          The final editorial architecture, visual identity and commercial
-          system will be implemented in later modules.
-        </span>
+      <div class="home-hero__actions">
+        <a class="button button--primary" href="#topics">
+          Explore topics
+        </a>
+
+        <a class="button button--secondary" href="#latest">
+          Read the latest
+        </a>
       </div>
+    </div>
+
+    <ul class="home-hero__principles" aria-label="Editorial principles">
+      <li>Practical from the start</li>
+      <li>Evidence where it matters</li>
+      <li>Trade-offs made clear</li>
+    </ul>
+  </section>
+
+  <section
+    id="topics"
+    class="home-section home-section--explore"
+    aria-labelledby="topics-title"
+  >
+    <div class="section-heading section-heading--split">
+      <div>
+        <p class="eyebrow">Topics</p>
+        <h2 id="topics-title">
+          The parts of life that shape how well we live.
+        </h2>
+      </div>
+
+      <p>
+        Happiness is not one subject. It is influenced by how we feel,
+        work, spend, connect, care for ourselves and use technology.
+      </p>
+    </div>
+
+    <div class="content-type-grid">
+      {
+        topicAreas.map((item, index) => (
+          <article class="content-type-card">
+            <span class="content-type-card__number">
+              {String(index + 1).padStart(2, '0')}
+            </span>
+
+            <h3>{item.name}</h3>
+            <p>{item.description}</p>
+          </article>
+        ))
+      }
     </div>
   </section>
 
-  <section class="foundation-section" aria-labelledby="foundation-title">
+  <section
+    id="latest"
+    class="home-section home-section--latest"
+    aria-labelledby="latest-title"
+  >
     <div class="section-heading">
-      <p class="eyebrow">Initial architecture</p>
-      <h2 id="foundation-title">
-        Built as an independent, static and performance-focused publication
+      <p class="eyebrow">Latest</p>
+      <h2 id="latest-title">Recently published</h2>
+    </div>
+
+    {
+      publishedArticles.length > 0 ? (
+        <div class="article-card-grid">
+          {
+            publishedArticles.map((article) => (
+              <ArticleCard
+                href={getArticlePath(article)}
+                title={article.data.title}
+                description={article.data.description}
+                contentType={article.data.contentType}
+                category={article.data.category}
+                publishedAt={article.data.publishedAt}
+              />
+            ))
+          }
+        </div>
+      ) : (
+        <div class="empty-publication-state">
+          <p class="eyebrow">First series in development</p>
+          <h3>New practical guides are on the way.</h3>
+          <p>
+            The first articles are being prepared around real questions
+            people ask about health, work, money, wellbeing and technology.
+          </p>
+        </div>
+      )
+    }
+  </section>
+
+  <section
+    id="what-to-expect"
+    class="home-section home-section--approach"
+    aria-labelledby="what-to-expect-title"
+  >
+    <div class="section-heading">
+      <p class="eyebrow">What to expect</p>
+      <h2 id="what-to-expect-title">
+        Answers you can use, with enough detail to decide.
       </h2>
     </div>
 
-    <div class="foundation-grid">
+    <div class="approach-grid">
       <article>
-        <h3>Editorial foundation</h3>
+        <span>01</span>
+        <h3>Start with the useful answer</h3>
         <p>
-          Structured content, semantic HTML and a controlled publishing
-          workflow.
+          We lead with the practical conclusion, then explain the reasoning
+          and context behind it.
         </p>
       </article>
 
       <article>
-        <h3>Commercial separation</h3>
+        <span>02</span>
+        <h3>Make the trade-offs visible</h3>
         <p>
-          Affiliate recommendations, programmatic advertising and editorial
-          content will remain technically distinct.
+          Benefits, limitations, costs and uncertainties are presented
+          together—not hidden in the fine print.
         </p>
       </article>
 
       <article>
-        <h3>Performance first</h3>
+        <span>03</span>
+        <h3>Keep promotion in its place</h3>
         <p>
-          Static generation, minimal JavaScript and optimized assets as the
-          default.
+          Paid links and advertisements are identified, while editorial
+          conclusions remain separate.
         </p>
       </article>
     </div>

@@ -1,10 +1,49 @@
+---
+const isHome = Astro.url.pathname === '/';
+
+const navigation = [
+  { href: '/#topics', label: 'Topics' },
+  { href: '/#latest', label: 'Latest' },
+  { href: '/#what-to-expect', label: 'What to expect' },
+];
+---
+
 <header class="site-header">
   <div class="site-header__inner">
-    <a class="site-brand" href="/" aria-label="Happiness in the Digital Age home">
-      <span>Happiness</span>
+    <a
+      class="site-brand"
+      href="/"
+      aria-label="Happiness in the Digital Age home"
+      aria-current={isHome ? 'page' : undefined}
+    >
+      <span class="site-brand__primary">Happiness</span>
       <span class="site-brand__secondary">in the Digital Age</span>
     </a>
 
-    <span class="technical-status">Technical foundation</span>
+    <nav
+      class="site-navigation site-navigation--desktop"
+      aria-label="Primary navigation"
+    >
+      {
+        navigation.map((item) => (
+          <a href={item.href}>{item.label}</a>
+        ))
+      }
+    </nav>
+
+    <details class="mobile-navigation">
+      <summary aria-label="Open navigation">
+        <span>Menu</span>
+        <span class="mobile-navigation__icon" aria-hidden="true"></span>
+      </summary>
+
+      <nav aria-label="Mobile navigation">
+        {
+          navigation.map((item) => (
+            <a href={item.href}>{item.label}</a>
+          ))
+        }
+      </nav>
+    </details>
   </div>
 </header>

@@ -1,0 +1,53 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+  contentType: string;
+  category: string;
+  publishedAt: Date;
+}
+
+const {
+  href,
+  title,
+  description,
+  contentType,
+  category,
+  publishedAt,
+} = Astro.props;
+
+const formattedType = contentType.replaceAll('-', ' ');
+const formattedCategory = category.replaceAll('-', ' ');
+
+const formattedDate = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+}).format(publishedAt);
+---
+
+<article class="article-card">
+  <div class="article-card__meta">
+    <span>{formattedType}</span>
+    <span aria-hidden="true">·</span>
+    <span>{formattedCategory}</span>
+  </div>
+
+  <h3>
+    <a href={href}>{title}</a>
+  </h3>
+
+  <p>{description}</p>
+
+  <div class="article-card__footer">
+    <time datetime={publishedAt.toISOString()}>
+      {formattedDate}
+    </time>
+
+    <a class="article-card__link" href={href}>
+      Read article
+      <span aria-hidden="true">→</span>
+    </a>
+  </div>
+</article>
