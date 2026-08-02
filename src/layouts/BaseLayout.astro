@@ -3,8 +3,10 @@ import SeoHead from '../components/seo/SeoHead.astro';
 import SiteFooter from '../components/site/SiteFooter.astro';
 import SiteHeader from '../components/site/SiteHeader.astro';
 import CookieConsent from '../components/site/CookieConsent.astro';
+
 import '../styles/global.css';
 import '../styles/site-shell.css';
+import '../styles/premium-shell.css';
 
 interface Props {
   title: string;
@@ -29,6 +31,7 @@ const {
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1"
@@ -76,13 +79,18 @@ const {
         wait_for_update: 500,
       });
     </script>
-
   </head>
 
   <body data-page-path={Astro.url.pathname}>
     <a class="skip-link" href="#main-content">
       Skip to content
     </a>
+
+    <div class="reading-progress" aria-hidden="true">
+      <span data-reading-progress-bar></span>
+    </div>
+
+    <div class="site-ambient" aria-hidden="true"></div>
 
     <div class="site-shell">
       <SiteHeader />
@@ -98,6 +106,48 @@ const {
 
     <script>
       import '../scripts/commercial-tracking';
+
+      const progressBar =
+        document.querySelector(
+          '[data-reading-progress-bar]',
+        );
+
+      const updateReadingProgress = (): void => {
+        if (!(progressBar instanceof HTMLElement)) {
+          return;
+        }
+
+        const documentHeight =
+          document.documentElement.scrollHeight -
+          window.innerHeight;
+
+        const progress =
+          documentHeight > 0
+            ? Math.min(
+                100,
+                Math.max(
+                  0,
+                  (window.scrollY / documentHeight) * 100,
+                ),
+              )
+            : 0;
+
+        progressBar.style.transform =
+          `scaleX(${progress / 100})`;
+      };
+
+      updateReadingProgress();
+
+      window.addEventListener(
+        'scroll',
+        updateReadingProgress,
+        { passive: true },
+      );
+
+      window.addEventListener(
+        'resize',
+        updateReadingProgress,
+      );
     </script>
   </body>
 </html>

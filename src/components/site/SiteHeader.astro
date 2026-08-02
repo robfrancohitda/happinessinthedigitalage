@@ -22,9 +22,18 @@ function isCurrentSection(href: string): boolean {
       aria-label="Happiness in the Digital Age home"
       aria-current={currentPath === '/' ? 'page' : undefined}
     >
-      <span class="site-brand__primary">Happiness</span>
-      <span class="site-brand__secondary">
-        in the Digital Age
+      <span class="site-brand__mark" aria-hidden="true">
+        H
+      </span>
+
+      <span class="site-brand__copy">
+        <span class="site-brand__primary">
+          Happiness
+        </span>
+
+        <span class="site-brand__secondary">
+          in the Digital Age
+        </span>
       </span>
     </a>
 
@@ -51,6 +60,7 @@ function isCurrentSection(href: string): boolean {
     <details class="mobile-navigation">
       <summary aria-label="Open navigation">
         <span>Menu</span>
+
         <span
           class="mobile-navigation__icon"
           aria-hidden="true"

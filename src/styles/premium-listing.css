@@ -1,0 +1,123 @@
+.article-section-hero {
+  width: min(calc(100% - 40px), var(--max-width));
+  margin: 1.4rem auto 0;
+  overflow: hidden;
+  color: #fff;
+  background:
+    radial-gradient(
+      circle at 88% 10%,
+      rgb(232 91 61 / 34%),
+      transparent 27rem
+    ),
+    radial-gradient(
+      circle at 10% 90%,
+      rgb(20 127 115 / 24%),
+      transparent 30rem
+    ),
+    linear-gradient(
+      140deg,
+      #10231d,
+      #173c31
+    );
+  border-radius: var(--radius-large);
+  box-shadow: 0 30px 90px rgb(16 35 29 / 20%);
+}
+
+.article-section-hero__inner {
+  max-width: 940px;
+  padding:
+    clamp(3.5rem, 8vw, 7rem)
+    clamp(1.5rem, 6vw, 5rem);
+}
+
+.article-section-hero nav {
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 0.6rem;
+  color: rgb(255 255 255 / 50%);
+  font-size: 0.68rem;
+}
+
+.article-section-hero nav a {
+  color: #ff9278;
+  text-decoration: none;
+}
+
+.article-section-hero__eyebrow {
+  color: #85bbae;
+}
+
+.article-section-hero h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 9vw, 7rem);
+  font-weight: 530;
+  letter-spacing: -0.072em;
+  line-height: 0.88;
+}
+
+.article-section-hero__description {
+  max-width: 690px;
+  margin: 2rem 0 0;
+  color: rgb(255 255 255 / 68%);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.article-listing {
+  width: min(calc(100% - 40px), var(--max-width));
+  margin-inline: auto;
+  padding-block: clamp(5rem, 10vw, 9rem);
+}
+
+.article-listing__heading h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2.7rem, 6vw, 5rem);
+  font-weight: 540;
+  letter-spacing: -0.058em;
+}
+
+.article-listing__grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.article-listing__grid .article-card {
+  min-height: 390px;
+  background: rgb(255 253 248 / 82%);
+  border: 1px solid rgb(255 255 255 / 72%);
+  border-radius: 26px;
+  box-shadow: var(--shadow-soft);
+}
+
+.article-listing__empty {
+  padding: clamp(2rem, 6vw, 5rem);
+  background: rgb(255 253 248 / 72%);
+  border: 1px solid rgb(255 255 255 / 70%);
+  border-radius: 28px;
+  box-shadow: var(--shadow-soft);
+}
+
+.article-listing__empty h3 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-weight: 550;
+  letter-spacing: -0.05em;
+}
+
+@media (max-width: 700px) {
+  .article-section-hero,
+  .article-listing {
+    width: min(calc(100% - 28px), var(--max-width));
+  }
+
+  .article-section-hero {
+    border-radius: 27px;
+  }
+
+  .article-listing__grid {
+    grid-template-columns: 1fr;
+  }
+}
