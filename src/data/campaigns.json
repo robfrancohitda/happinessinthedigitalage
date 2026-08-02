@@ -50,5 +50,113 @@
       "appendArticleId": true,
       "appendPlacement": true
     }
+  },
+  "neurovera-us-contextual": {
+    "name": "NeuroVera contextual campaign",
+    "status": "active",
+    "kind": "affiliate",
+    "network": "clickbank",
+    "productId": "neurovera",
+    "destinationUrl": "https://065397vfe41t8v5ftmzdya11b8.hop.clickbank.net",
+    "priority": 100,
+    "weight": 100,
+    "relationship": "contextual",
+    "placements": [
+      "article-masthead",
+      "article-inline-text",
+      "article-visual-card",
+      "article-final-banner"
+    ],
+    "targeting": {
+      "articleIds": [
+        "neurovera-review"
+      ],
+      "contentTypes": [],
+      "verticals": [],
+      "categories": [],
+      "topics": [],
+      "tags": [],
+      "excludedArticleIds": []
+    },
+    "creatives": [
+      {
+        "id": "neurovera-final-banner-image-a-v01",
+        "placement": "article-final-banner",
+        "format": "image",
+        "variant": "a",
+        "images": {
+          "desktop": {
+            "src": "/assets/ads/neurovera-us-contextual/neurovera-final-banner-desktop.webp",
+            "width": 1456,
+            "height": 180
+          },
+          "mobile": {
+            "src": "/assets/ads/neurovera-us-contextual/neurovera-final-banner-mobile.webp",
+            "width": 640,
+            "height": 200
+          },
+          "alt": "NeuroVera promotional artwork for an editorial product review."
+        }
+      },
+      {
+        "id": "neurovera-inline-text-a-v01",
+        "placement": "article-inline-text",
+        "format": "structured",
+        "variant": "a",
+        "headline": "Considering a memory-support supplement?",
+        "body": "Review NeuroVera's ingredients, pricing, advertised benefits and purchasing terms before deciding whether it fits your needs.",
+        "cta": "Review NeuroVera"
+      },
+      {
+        "id": "neurovera-masthead-image-a-v01",
+        "placement": "article-masthead",
+        "format": "image",
+        "variant": "a",
+        "images": {
+          "desktop": {
+            "src": "/assets/ads/neurovera-us-contextual/neurovera-masthead-desktop.webp",
+            "width": 1940,
+            "height": 180
+          },
+          "mobile": {
+            "src": "/assets/ads/neurovera-us-contextual/neurovera-masthead-mobile.webp",
+            "width": 640,
+            "height": 100
+          },
+          "alt": "NeuroVera promotional artwork for an editorial product review."
+        }
+      },
+      {
+        "id": "neurovera-visual-card-image-a-v01",
+        "placement": "article-visual-card",
+        "format": "image",
+        "variant": "a",
+        "images": {
+          "desktop": {
+            "src": "/assets/ads/neurovera-us-contextual/neurovera-visual-card-desktop.webp",
+            "width": 1600,
+            "height": 900
+          },
+          "mobile": {
+            "src": "/assets/ads/neurovera-us-contextual/neurovera-visual-card-mobile.webp",
+            "width": 1080,
+            "height": 1350
+          },
+          "alt": "NeuroVera promotional artwork for an editorial product review."
+        }
+      }
+    ],
+    "creative": {
+      "headline": "Considering a memory-support supplement?",
+      "body": "Review the ingredients, pricing, advertised benefits and purchasing terms before deciding whether NeuroVera fits your needs.",
+      "cta": "Review NeuroVera"
+    },
+    "disclosureLabel": "Ad",
+    "tracking": {
+      "subIdParameter": "tid",
+      "campaignParameter": "campaign",
+      "appendArticleId": true,
+      "appendPlacement": true
+    }
   }
 }

@@ -6,13 +6,56 @@
     "vendor": "Happiness in the Digital Age",
     "publicSummary": "Internal draft record used only to validate the HITDA product and affiliate data architecture.",
     "destinationUrl": "https://www.happinessinthedigitalage.digital/",
-    "verticals": ["digital-life"],
-    "categories": ["technical-foundation"],
-    "topics": ["commercial-architecture"],
-    "audience": ["Internal technical validation only"],
-    "benefits": ["Validates structured product fields before real offers are added"],
-    "cautions": ["This record must never be activated or displayed publicly"],
+    "verticals": [
+      "digital-life"
+    ],
+    "categories": [
+      "technical-foundation"
+    ],
+    "topics": [
+      "commercial-architecture"
+    ],
+    "audience": [
+      "Internal technical validation only"
+    ],
+    "benefits": [
+      "Validates structured product fields before real offers are added"
+    ],
+    "cautions": [
+      "This record must never be activated or displayed publicly"
+    ],
     "disclosureText": "Advertisement",
+    "creativeIds": []
+  },
+  "neurovera": {
+    "name": "NeuroVera",
+    "status": "active",
+    "network": "clickbank",
+    "vendor": "NeuroVera",
+    "publicSummary": "NeuroVera is a dietary supplement marketed to support memory function and general brain health.",
+    "destinationUrl": "https://www.theneurovera.com/",
+    "verticals": [
+      "health-and-wellbeing"
+    ],
+    "categories": [
+      "brain-health-supplements"
+    ],
+    "topics": [
+      "memory-support",
+      "focus",
+      "cognitive-wellness"
+    ],
+    "audience": [
+      "Adults researching dietary supplements marketed for memory and cognitive support"
+    ],
+    "benefits": [
+      "Marketed as a plant-based formula intended to support memory and general brain health"
+    ],
+    "cautions": [
+      "Health claims require editorial qualification and evidence review",
+      "Affiliate terms and creative permissions remain pending"
+    ],
+    "disclosureText": "This page may contain affiliate links.",
     "creativeIds": []
   }
 }
