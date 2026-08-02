@@ -128,3 +128,89 @@ export async function getRelatedArticles(
     .slice(0, limit)
     .map(({ article }) => article);
 }
+
+export interface ArticleSectionMeta {
+  title: string;
+  eyebrow: string;
+  description: string;
+  emptyTitle: string;
+  emptyDescription: string;
+}
+
+export const articleSectionMeta = {
+  guide: {
+    title: 'Guides',
+    eyebrow: 'Practical guidance',
+    description:
+      'Clear steps, useful frameworks and realistic ways to handle everyday decisions.',
+    emptyTitle: 'The first guides are being prepared.',
+    emptyDescription:
+      'New practical guides will appear here as they are published.',
+  },
+
+  explainer: {
+    title: 'Explainers',
+    eyebrow: 'Understand what matters',
+    description:
+      'Complex ideas, claims and digital changes explained in direct, useful language.',
+    emptyTitle: 'The first explainers are being prepared.',
+    emptyDescription:
+      'New explanations will appear here as they are published.',
+  },
+
+  review: {
+    title: 'Reviews',
+    eyebrow: 'Products and services examined',
+    description:
+      'Practical assessments of usefulness, limitations, cost and suitability.',
+    emptyTitle: 'The first reviews are being prepared.',
+    emptyDescription:
+      'New product and service reviews will appear here as they are published.',
+  },
+
+  comparison: {
+    title: 'Comparisons',
+    eyebrow: 'Options placed side by side',
+    description:
+      'Differences, trade-offs and practical criteria for choosing between alternatives.',
+    emptyTitle: 'The first comparisons are being prepared.',
+    emptyDescription:
+      'New comparisons will appear here as they are published.',
+  },
+
+  resource: {
+    title: 'Resources',
+    eyebrow: 'Useful materials',
+    description:
+      'Tools, references, checklists and selected materials for practical use.',
+    emptyTitle: 'The first resources are being prepared.',
+    emptyDescription:
+      'New tools and materials will appear here as they are published.',
+  },
+} as const satisfies Record<
+  ArticleContentType,
+  ArticleSectionMeta
+>;
+
+export function getArticleSectionPath(
+  contentType: ArticleContentType,
+): string {
+  return `/${articleSectionByType[contentType]}/`;
+}
+
+export async function getArticleStaticPaths(
+  contentType: ArticleContentType,
+) {
+  const articles =
+    await getPublishedArticlesByType(contentType);
+
+  return articles.map((article) => ({
+    params: {
+      slug: article.id,
+    },
+
+    props: {
+      article,
+    },
+  }));
+}

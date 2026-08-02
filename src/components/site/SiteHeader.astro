@@ -1,11 +1,17 @@
 ---
-const isHome = Astro.url.pathname === '/';
+const currentPath = Astro.url.pathname;
 
 const navigation = [
-  { href: '/#topics', label: 'Topics' },
-  { href: '/#latest', label: 'Latest' },
-  { href: '/#what-to-expect', label: 'What to expect' },
+  { href: '/guides/', label: 'Guides' },
+  { href: '/explainers/', label: 'Explainers' },
+  { href: '/reviews/', label: 'Reviews' },
+  { href: '/comparisons/', label: 'Comparisons' },
+  { href: '/resources/', label: 'Resources' },
 ];
+
+function isCurrentSection(href: string): boolean {
+  return currentPath.startsWith(href);
+}
 ---
 
 <header class="site-header">
@@ -14,10 +20,12 @@ const navigation = [
       class="site-brand"
       href="/"
       aria-label="Happiness in the Digital Age home"
-      aria-current={isHome ? 'page' : undefined}
+      aria-current={currentPath === '/' ? 'page' : undefined}
     >
       <span class="site-brand__primary">Happiness</span>
-      <span class="site-brand__secondary">in the Digital Age</span>
+      <span class="site-brand__secondary">
+        in the Digital Age
+      </span>
     </a>
 
     <nav
@@ -26,7 +34,16 @@ const navigation = [
     >
       {
         navigation.map((item) => (
-          <a href={item.href}>{item.label}</a>
+          <a
+            href={item.href}
+            aria-current={
+              isCurrentSection(item.href)
+                ? 'page'
+                : undefined
+            }
+          >
+            {item.label}
+          </a>
         ))
       }
     </nav>
@@ -34,13 +51,25 @@ const navigation = [
     <details class="mobile-navigation">
       <summary aria-label="Open navigation">
         <span>Menu</span>
-        <span class="mobile-navigation__icon" aria-hidden="true"></span>
+        <span
+          class="mobile-navigation__icon"
+          aria-hidden="true"
+        ></span>
       </summary>
 
       <nav aria-label="Mobile navigation">
         {
           navigation.map((item) => (
-            <a href={item.href}>{item.label}</a>
+            <a
+              href={item.href}
+              aria-current={
+                isCurrentSection(item.href)
+                  ? 'page'
+                  : undefined
+              }
+            >
+              {item.label}
+            </a>
           ))
         }
       </nav>

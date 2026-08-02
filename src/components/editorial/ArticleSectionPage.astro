@@ -1,0 +1,100 @@
+---
+import ArticleCard from './ArticleCard.astro';
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+import {
+  articleSectionMeta,
+  getArticlePath,
+  getPublishedArticlesByType,
+  type ArticleContentType,
+} from '../../lib/articles';
+
+import '../../styles/article-listing.css';
+
+interface Props {
+  contentType: ArticleContentType;
+}
+
+const { contentType } = Astro.props;
+
+const section = articleSectionMeta[contentType];
+
+const articles =
+  await getPublishedArticlesByType(contentType);
+
+const pageTitle =
+  `${section.title} | Happiness in the Digital Age`;
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={section.description}
+>
+  <section class="article-section-hero">
+    <div class="article-section-hero__inner">
+      <nav aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{section.title}</span>
+      </nav>
+
+      <p class="article-section-hero__eyebrow">
+        {section.eyebrow}
+      </p>
+
+      <h1>{section.title}</h1>
+
+      <p class="article-section-hero__description">
+        {section.description}
+      </p>
+    </div>
+  </section>
+
+  <section
+    class="article-listing"
+    aria-labelledby="article-listing-title"
+  >
+    <div class="article-listing__heading">
+      <p>Published</p>
+
+      <h2 id="article-listing-title">
+        Latest {section.title.toLowerCase()}
+      </h2>
+    </div>
+
+    {
+      articles.length > 0 ? (
+        <div class="article-listing__grid">
+          {
+            articles.map((article) => (
+              <ArticleCard
+                href={getArticlePath(article)}
+                title={article.data.title}
+                description={article.data.description}
+                contentType={article.data.contentType}
+                category={article.data.category}
+                publishedAt={article.data.publishedAt}
+              />
+            ))
+          }
+        </div>
+      ) : (
+        <div class="article-listing__empty">
+          <p class="article-listing__empty-label">
+            In development
+          </p>
+
+          <h3>{section.emptyTitle}</h3>
+
+          <p>{section.emptyDescription}</p>
+
+          <a href="/">
+            Return to the homepage
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      )
+    }
+  </section>
+</BaseLayout>
