@@ -9,47 +9,33 @@ const navigation = [
   { href: '/resources/', label: 'Resources' },
 ];
 
-function isCurrentSection(href: string): boolean {
+function isCurrent(href: string): boolean {
   return currentPath.startsWith(href);
 }
 ---
 
 <header class="site-header">
-  <div class="site-header__inner">
+  <div class="hitda-container header-inner">
     <a
-      class="site-brand"
+      class="brand"
       href="/"
-      aria-label="Happiness in the Digital Age home"
+      aria-label="HITDA home"
       aria-current={currentPath === '/' ? 'page' : undefined}
     >
-      <span class="site-brand__mark" aria-hidden="true">
-        H
-      </span>
+      <span class="brand-mark">HITDA</span>
 
-      <span class="site-brand__copy">
-        <span class="site-brand__primary">
-          Happiness
-        </span>
-
-        <span class="site-brand__secondary">
-          in the Digital Age
-        </span>
+      <span class="brand-copy">
+        <strong>Happiness</strong>
+        <span>in the Digital Age</span>
       </span>
     </a>
 
-    <nav
-      class="site-navigation site-navigation--desktop"
-      aria-label="Primary navigation"
-    >
+    <nav class="desktop-navigation" aria-label="Primary navigation">
       {
         navigation.map((item) => (
           <a
             href={item.href}
-            aria-current={
-              isCurrentSection(item.href)
-                ? 'page'
-                : undefined
-            }
+            aria-current={isCurrent(item.href) ? 'page' : undefined}
           >
             {item.label}
           </a>
@@ -57,14 +43,15 @@ function isCurrentSection(href: string): boolean {
       }
     </nav>
 
+    <a class="header-cta" href="/#latest">
+      Read the latest
+    </a>
+
     <details class="mobile-navigation">
       <summary aria-label="Open navigation">
-        <span>Menu</span>
-
-        <span
-          class="mobile-navigation__icon"
-          aria-hidden="true"
-        ></span>
+        <span></span>
+        <span></span>
+        <span></span>
       </summary>
 
       <nav aria-label="Mobile navigation">
@@ -72,11 +59,7 @@ function isCurrentSection(href: string): boolean {
           navigation.map((item) => (
             <a
               href={item.href}
-              aria-current={
-                isCurrentSection(item.href)
-                  ? 'page'
-                  : undefined
-              }
+              aria-current={isCurrent(item.href) ? 'page' : undefined}
             >
               {item.label}
             </a>

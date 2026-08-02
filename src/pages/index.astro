@@ -1,256 +1,455 @@
 ---
-import ArticleCard from '../components/editorial/ArticleCard.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import {
-  articleSectionMeta,
-  getArticlePath,
-  getArticleSectionPath,
-  getPublishedArticles,
-  type ArticleContentType,
-} from '../lib/articles';
+
 import '../styles/home.css';
 import '../styles/premium-home.css';
-
-const title = 'Happiness in the Digital Age';
-const description =
-  'Practical guidance on wellbeing, health, money, work, relationships and technology for better everyday decisions.';
-
-const topicAreas = [
-  {
-    name: 'Wellbeing',
-    description:
-      'Stress, sleep, focus, emotional balance and the habits that support a steadier life.',
-  },
-  {
-    name: 'Health & Nutrition',
-    description:
-      'Everyday health choices, food, supplements and claims examined with appropriate care.',
-  },
-  {
-    name: 'Work & Money',
-    description:
-      'Practical decisions about productivity, income, digital work, spending and financial tools.',
-  },
-  {
-    name: 'Relationships & Home',
-    description:
-      'Communication, family life, routines and the small systems that make daily life work better.',
-  },
-  {
-    name: 'Technology & Digital Life',
-    description:
-      'AI, privacy, attention, devices and digital tools explained in human terms.',
-  },
-];
-
-const publishedArticles = (
-  await getPublishedArticles()
-).slice(0, 6);
-
-const editorialSectionTypes: ArticleContentType[] = [
-  'guide',
-  'explainer',
-  'review',
-  'comparison',
-  'resource',
-];
 ---
 
-<BaseLayout title={title} description={description}>
-  <section class="home-hero">
-    <div class="home-hero__content">
-      <p class="eyebrow">Practical guidance for everyday life</p>
+<BaseLayout
+  title="HITDA — Happiness in the Digital Age"
+  description="Independent guides, explainers, reviews and comparisons for work, money, technology, wellbeing and everyday life."
+  canonical="https://www.happinessinthedigitalage.digital/"
+>
+  <section class="hitda-hero" aria-labelledby="home-title">
+    <div class="hitda-hero__copy">
+      <p class="hitda-eyebrow">
+        Independent digital-life publication
+      </p>
 
-      <h1>
-        Live better in a world that keeps changing.
+      <h1 id="home-title">
+        Clearer choices for life in the
+        <em>digital age.</em>
       </h1>
 
-      <p class="home-hero__summary">
-        Clear, useful guidance on wellbeing, health, money, work,
-        relationships and technology—so you can understand your options
-        and make decisions with more confidence.
+      <p class="hitda-lead">
+        Independent guides, explainers, reviews and
+        comparisons for work, money, technology,
+        wellbeing and everyday life.
       </p>
 
-      <div class="home-hero__actions">
-        <a class="button button--primary" href="#topics">
-          Explore topics
+      <div class="hitda-actions">
+        <a class="hitda-button hitda-button--coral" href="#latest">
+          Explore the latest
         </a>
 
-        <a class="button button--secondary" href="#latest">
-          Read the latest
+        <a class="hitda-button hitda-button--outline" href="/reviews/">
+          Browse reviews
         </a>
+      </div>
+
+      <div class="hero-principles">
+        <div>
+          <strong>Independent</strong>
+          <span>
+            Commercial relationships do not determine conclusions.
+          </span>
+        </div>
+
+        <div>
+          <strong>Practical</strong>
+          <span>
+            Useful answers before unnecessary complexity.
+          </span>
+        </div>
+
+        <div>
+          <strong>Human</strong>
+          <span>
+            Digital life explained through real decisions.
+          </span>
+        </div>
       </div>
     </div>
 
-    <ul class="home-hero__principles" aria-label="Editorial principles">
-      <li>Practical from the start</li>
-      <li>Evidence where it matters</li>
-      <li>Trade-offs made clear</li>
-    </ul>
+    <div class="hitda-hero__visual" aria-label="HITDA editorial universe">
+      <div class="visual-grid">
+        <article class="visual-block visual-block--main">
+          <small>Happiness in the Digital Age</small>
+
+          <strong>
+            Life<br />
+            Work<br />
+            Tech
+          </strong>
+        </article>
+
+        <article class="visual-block visual-block--acid">
+          <small>Field 01</small>
+          <strong>Money</strong>
+        </article>
+
+        <article class="visual-block visual-block--paper">
+          <small>Field 02</small>
+          <strong>Wellbeing</strong>
+        </article>
+
+        <article class="visual-block visual-block--wide">
+          <div>
+            <small>Editorial system</small>
+
+            <strong>
+              Useful information.<br />
+              Better decisions.
+            </strong>
+          </div>
+
+          <span class="visual-index">26</span>
+        </article>
+      </div>
+    </div>
   </section>
 
-  <section
-    id="topics"
-    class="home-section home-section--explore"
-    aria-labelledby="topics-title"
-  >
-    <div class="section-heading section-heading--split">
-      <div>
-        <p class="eyebrow">Topics</p>
-        <h2 id="topics-title">
-          The parts of life that shape how well we live.
-        </h2>
-      </div>
-
+  <section class="editorial-manifesto" aria-label="Editorial principles">
+    <article>
+      <span>01</span>
+      <strong>Answer the real question</strong>
       <p>
-        Happiness is not one subject. It is influenced by how we feel,
-        work, spend, connect, care for ourselves and use technology.
+        Start with the decision the reader actually needs to make.
       </p>
+    </article>
+
+    <article>
+      <span>02</span>
+      <strong>Separate evidence from claims</strong>
+      <p>
+        Show what is known, what is promoted and what remains uncertain.
+      </p>
+    </article>
+
+    <article>
+      <span>03</span>
+      <strong>Respect the reader's time</strong>
+      <p>
+        Direct language, useful structure and no decorative complexity.
+      </p>
+    </article>
+
+    <article>
+      <span>04</span>
+      <strong>Keep commerce visible</strong>
+      <p>
+        Affiliate relationships are disclosed without taking over the work.
+      </p>
+    </article>
+  </section>
+
+  <section class="featured-review" aria-labelledby="featured-title">
+    <div class="featured-review__copy">
+      <p class="hitda-eyebrow">
+        Featured review
+      </p>
+
+      <h2 id="featured-title">
+        Before you buy, know what to check.
+      </h2>
+
+      <p class="hitda-lead">
+        Our NeuroVera review examines the seller's claims,
+        available ingredient information, price structure and
+        the points that deserve closer attention.
+      </p>
+
+      <dl class="featured-details">
+        <div>
+          <dt>Format</dt>
+          <dd>Independent product review</dd>
+        </div>
+
+        <div>
+          <dt>Author</dt>
+          <dd>Emily Carter</dd>
+        </div>
+
+        <div>
+          <dt>Focus</dt>
+          <dd>
+            Ingredients, price, evidence and buying considerations
+          </dd>
+        </div>
+      </dl>
+
+      <a
+        class="hitda-button hitda-button--coral"
+        href="/reviews/neurovera-review/"
+      >
+        Read the NeuroVera review
+      </a>
     </div>
 
-    <div class="content-type-grid">
-      {
-        topicAreas.map((item, index) => (
-          <article class="content-type-card">
-            <span class="content-type-card__number">
-              {String(index + 1).padStart(2, '0')}
-            </span>
+    <div class="featured-review__visual" aria-hidden="true">
+      <div class="review-composition">
+        <div class="review-name">
+          <strong>NeuroVera</strong>
+        </div>
 
-            <h3>{item.name}</h3>
-            <p>{item.description}</p>
-          </article>
-        ))
-      }
+        <div class="review-file">
+          <span>Review file</span>
+          <strong>01</strong>
+        </div>
+
+        <div class="review-caption">
+          <strong>Ingredients · price · claims</strong>
+          <span>Updated Aug 2, 2026</span>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section
-    id="formats"
-    class="home-section home-section--formats"
-    aria-labelledby="formats-title"
-  >
-    <div class="section-heading section-heading--split">
-      <div>
-        <p class="eyebrow">Explore by format</p>
+  <section class="coverage-section" aria-labelledby="coverage-title">
+    <div class="hitda-container">
+      <header class="hitda-section-heading">
+        <h2 id="coverage-title">
+          What HITDA covers
+        </h2>
 
+        <p class="hitda-lead">
+          Broad subjects organized around practical choices
+          rather than abstract trends.
+        </p>
+      </header>
+
+      <div class="coverage-grid">
+        <a href="/guides/" class="coverage-card">
+          <span>01</span>
+          <h3>Work</h3>
+          <p>
+            Tools, systems and decisions for working in a digital economy.
+          </p>
+        </a>
+
+        <a href="/explainers/" class="coverage-card">
+          <span>02</span>
+          <h3>Technology</h3>
+          <p>
+            Products, platforms and changes that affect everyday life.
+          </p>
+        </a>
+
+        <a href="/resources/" class="coverage-card">
+          <span>03</span>
+          <h3>Money</h3>
+          <p>
+            Costs, value, digital finance and consumer decisions.
+          </p>
+        </a>
+
+        <a href="/reviews/" class="coverage-card">
+          <span>04</span>
+          <h3>Wellbeing</h3>
+          <p>
+            Products and habits connected to health, attention and rest.
+          </p>
+        </a>
+
+        <a href="/comparisons/" class="coverage-card">
+          <span>05</span>
+          <h3>Home</h3>
+          <p>
+            Choices that make everyday environments more functional.
+          </p>
+        </a>
+
+        <a href="/guides/" class="coverage-card">
+          <span>06</span>
+          <h3>Relationships</h3>
+          <p>
+            Communication and human connection in digital routines.
+          </p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="formats-section" aria-labelledby="formats-title">
+    <div class="hitda-container">
+      <header class="hitda-section-heading">
         <h2 id="formats-title">
-          Choose the kind of answer you need.
+          Five ways to explore
         </h2>
+
+        <p class="hitda-lead">
+          Each format has one job: explain, compare,
+          evaluate, guide or organize.
+        </p>
+      </header>
+
+      <div class="format-list">
+        <a href="/guides/" class="format-row">
+          <span class="format-number">01</span>
+          <h3>Guides</h3>
+          <p>
+            Step-by-step help for completing a task or solving a problem.
+          </p>
+          <span class="format-arrow" aria-hidden="true">→</span>
+        </a>
+
+        <a href="/explainers/" class="format-row">
+          <span class="format-number">02</span>
+          <h3>Explainers</h3>
+          <p>
+            What something is, how it works and why it matters.
+          </p>
+          <span class="format-arrow" aria-hidden="true">→</span>
+        </a>
+
+        <a href="/reviews/" class="format-row">
+          <span class="format-number">03</span>
+          <h3>Reviews</h3>
+          <p>
+            Evaluation of products, offers, claims and limitations.
+          </p>
+          <span class="format-arrow" aria-hidden="true">→</span>
+        </a>
+
+        <a href="/comparisons/" class="format-row">
+          <span class="format-number">04</span>
+          <h3>Comparisons</h3>
+          <p>
+            Side-by-side analysis focused on meaningful differences.
+          </p>
+          <span class="format-arrow" aria-hidden="true">→</span>
+        </a>
+
+        <a href="/resources/" class="format-row">
+          <span class="format-number">05</span>
+          <h3>Resources</h3>
+          <p>
+            Selected tools, references and practical material.
+          </p>
+          <span class="format-arrow" aria-hidden="true">→</span>
+        </a>
       </div>
-
-      <p>
-        Follow practical steps, understand a complex subject,
-        assess a product, compare alternatives or find a useful
-        resource.
-      </p>
     </div>
+  </section>
 
-    <div class="editorial-format-grid">
-      {
-        editorialSectionTypes.map((contentType, index) => {
-          const section = articleSectionMeta[contentType];
+  <section class="authors-section" aria-labelledby="authors-title">
+    <div class="hitda-container">
+      <header class="hitda-section-heading">
+        <h2 id="authors-title">
+          Editorial voices
+        </h2>
 
-          return (
-            <a
-              class="editorial-format-card"
-              href={getArticleSectionPath(contentType)}
-            >
-              <span class="editorial-format-card__number">
-                {String(index + 1).padStart(2, '0')}
-              </span>
+        <p class="hitda-lead">
+          Three areas of responsibility.
+          One publication standard.
+        </p>
+      </header>
 
-              <h3>{section.title}</h3>
-              <p>{section.description}</p>
+      <div class="authors-grid">
+        <article class="author-card">
+          <span class="author-initials">RF</span>
 
-              <span class="editorial-format-card__link">
-                Explore {section.title.toLowerCase()}
-                <span aria-hidden="true">→</span>
-              </span>
-            </a>
-          );
-        })
-      }
+          <h3>Rob Franco</h3>
+
+          <p>
+            Reviews, comparisons, products,
+            affiliate coverage and editorial direction.
+          </p>
+        </article>
+
+        <article class="author-card author-card--green">
+          <span class="author-initials">CB</span>
+
+          <h3>Claire Bennett</h3>
+
+          <p>
+            Work, money, technology,
+            digital life and practical guides.
+          </p>
+        </article>
+
+        <article class="author-card">
+          <span class="author-initials">EC</span>
+
+          <h3>Emily Carter</h3>
+
+          <p>
+            Wellbeing, health, relationships,
+            home and lifestyle.
+          </p>
+        </article>
+      </div>
     </div>
   </section>
 
   <section
+    class="latest-section"
     id="latest"
-    class="home-section home-section--latest"
     aria-labelledby="latest-title"
   >
-    <div class="section-heading">
-      <p class="eyebrow">Latest</p>
-      <h2 id="latest-title">Recently published</h2>
-    </div>
+    <div class="hitda-container">
+      <header class="hitda-section-heading">
+        <h2 id="latest-title">
+          Start here
+        </h2>
 
-    {
-      publishedArticles.length > 0 ? (
-        <div class="article-card-grid">
-          {
-            publishedArticles.map((article) => (
-              <ArticleCard
-                href={getArticlePath(article)}
-                title={article.data.title}
-                description={article.data.description}
-                contentType={article.data.contentType}
-                category={article.data.category}
-                publishedAt={article.data.publishedAt}
-              />
-            ))
-          }
-        </div>
-      ) : (
-        <div class="empty-publication-state">
-          <p class="eyebrow">First series in development</p>
-          <h3>New practical guides are on the way.</h3>
+        <p class="hitda-lead">
+          The first review establishes the practical
+          editorial standard for what comes next.
+        </p>
+      </header>
+
+      <div class="latest-grid">
+        <a
+          href="/reviews/neurovera-review/"
+          class="latest-card latest-card--main"
+        >
+          <small>Review · Emily Carter</small>
+
+          <h3>
+            NeuroVera Review: Ingredients, Price,
+            and What to Check Before Buying
+          </h3>
+
           <p>
-            The first articles are being prepared around real questions
-            people ask about health, work, money, wellbeing and technology.
+            A cautious look at the available information,
+            seller claims and the questions a buyer should ask.
           </p>
-        </div>
-      )
-    }
+
+          <span>Read the review →</span>
+        </a>
+
+        <a
+          href="/reviews/"
+          class="latest-card latest-card--green"
+        >
+          <small>Editorial index</small>
+
+          <h3>
+            Browse all reviews
+          </h3>
+
+          <p>
+            Explore current and future product evaluations
+            in one dedicated section.
+          </p>
+
+          <span>Open reviews →</span>
+        </a>
+      </div>
+    </div>
   </section>
 
-  <section
-    id="what-to-expect"
-    class="home-section home-section--approach"
-    aria-labelledby="what-to-expect-title"
-  >
-    <div class="section-heading">
-      <p class="eyebrow">What to expect</p>
-      <h2 id="what-to-expect-title">
-        Answers you can use, with enough detail to decide.
+  <section class="closing-section" aria-labelledby="closing-title">
+    <div class="closing-section__copy">
+      <h2 id="closing-title">
+        Better information should make
+        the next step clearer.
       </h2>
+
+      <p class="hitda-lead">
+        Begin with practical reviews today,
+        then follow HITDA as every section expands.
+      </p>
+
+      <a class="hitda-button hitda-button--light" href="/reviews/">
+        Explore HITDA reviews
+      </a>
     </div>
 
-    <div class="approach-grid">
-      <article>
-        <span>01</span>
-        <h3>Start with the useful answer</h3>
-        <p>
-          We lead with the practical conclusion, then explain the reasoning
-          and context behind it.
-        </p>
-      </article>
-
-      <article>
-        <span>02</span>
-        <h3>Make the trade-offs visible</h3>
-        <p>
-          Benefits, limitations, costs and uncertainties are presented
-          together—not hidden in the fine print.
-        </p>
-      </article>
-
-      <article>
-        <span>03</span>
-        <h3>Keep promotion in its place</h3>
-        <p>
-          Paid links and advertisements are identified, while editorial
-          conclusions remain separate.
-        </p>
-      </article>
+    <div class="closing-section__panel" aria-hidden="true">
+      <span>Happiness in the Digital Age</span>
+      <strong>Think clearer.</strong>
     </div>
   </section>
 </BaseLayout>

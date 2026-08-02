@@ -1,13 +1,7 @@
 ---
 const year = new Date().getFullYear();
 
-const navigation = [
-  { href: '/#topics', label: 'Topics' },
-  { href: '/#latest', label: 'Latest' },
-  { href: '/#what-to-expect', label: 'What to expect' },
-];
-
-const information = [
+const links = [
   { href: '/contact/', label: 'Contact' },
   { href: '/privacy/', label: 'Privacy & cookies' },
   { href: '/terms/', label: 'Terms of use' },
@@ -19,51 +13,37 @@ const information = [
 ---
 
 <footer class="site-footer">
-  <div class="site-footer__inner">
-    <div class="site-footer__identity">
-      <a class="site-footer__brand" href="/">
-        Happiness in the Digital Age
+  <div class="hitda-container footer-grid">
+    <div>
+      <a class="footer-brand" href="/">
+        HITDA
       </a>
 
-      <p>
-        Practical guidance for living, working and choosing better in
-        a changing world.
+      <p class="footer-title">
+        Happiness in the Digital Age
+      </p>
+
+      <p class="footer-copy">
+        Independent guides, explainers, reviews and comparisons
+        for modern everyday decisions.
       </p>
     </div>
 
-    <nav
-      class="site-footer__navigation"
-      aria-label="Footer navigation"
-    >
-      <p class="site-footer__heading">Navigate</p>
-
+    <nav class="footer-links" aria-label="Information">
       {
-        navigation.map((item) => (
-          <a href={item.href}>{item.label}</a>
-        ))
-      }
-    </nav>
-
-    <nav
-      class="site-footer__information"
-      aria-label="Site information"
-    >
-      <p class="site-footer__heading">Information</p>
-
-      {
-        information.map((item) => (
+        links.map((item) => (
           <a href={item.href}>{item.label}</a>
         ))
       }
     </nav>
   </div>
 
-  <div class="site-footer__legal">
+  <div class="hitda-container footer-bottom">
     <p>© {year} HITDA. All rights reserved.</p>
 
     <p>
-      Some pages contain affiliate links. Editorial conclusions remain
-      independent.
+      Affiliate links may generate a commission.
+      Editorial conclusions remain independent.
     </p>
   </div>
 </footer>
