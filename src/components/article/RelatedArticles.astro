@@ -1,0 +1,170 @@
+---
+import {
+  articleTypeLabel,
+  getArticlePath,
+  type ArticleEntry,
+} from '../../lib/articles';
+
+interface Props {
+  articles: ArticleEntry[];
+  heading?: string;
+}
+
+const {
+  articles,
+  heading = 'Continue reading',
+} = Astro.props;
+---
+
+{
+  articles.length > 0 && (
+    <section
+      class="related-articles"
+      aria-labelledby="related-articles-title"
+    >
+      <div class="related-articles__heading">
+        <p>Related reading</p>
+        <h2 id="related-articles-title">{heading}</h2>
+      </div>
+
+      <div class="related-articles__grid">
+        {
+          articles.map((article) => (
+            <article class="related-article">
+              <p class="related-article__meta">
+                {articleTypeLabel[article.data.contentType]}
+                <span aria-hidden="true"> · </span>
+                {article.data.category.replaceAll('-', ' ')}
+              </p>
+
+              <h3>
+                <a href={getArticlePath(article)}>
+                  {article.data.title}
+                </a>
+              </h3>
+
+              <p>{article.data.description}</p>
+
+              <a
+                class="related-article__link"
+                href={getArticlePath(article)}
+              >
+                Read article
+                <span aria-hidden="true">→</span>
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .related-articles {
+    width: min(calc(100% - 40px), var(--max-width));
+    margin: clamp(5rem, 10vw, 9rem) auto 0;
+    padding-top: clamp(3rem, 6vw, 5rem);
+    border-top: 1px solid var(--border);
+  }
+
+  .related-articles__heading {
+    max-width: 720px;
+    margin-bottom: 2.5rem;
+  }
+
+  .related-articles__heading > p {
+    margin: 0 0 0.65rem;
+    color: var(--accent);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .related-articles__heading h2 {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    line-height: 1.08;
+  }
+
+  .related-articles__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .related-article {
+    min-height: 320px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+
+  .related-article__meta {
+    margin: 0;
+    color: var(--accent);
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.075em;
+    text-transform: uppercase;
+  }
+
+  .related-article h3 {
+    margin: 1.5rem 0 0.8rem;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.55rem;
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 1.12;
+  }
+
+  .related-article h3 a {
+    text-decoration: none;
+  }
+
+  .related-article h3 a:hover,
+  .related-article h3 a:focus-visible {
+    color: var(--accent);
+  }
+
+  .related-article > p:not(.related-article__meta) {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: 0.86rem;
+  }
+
+  .related-article__link {
+    margin-top: auto;
+    padding-top: 1.5rem;
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .related-article__link span {
+    margin-left: 0.25rem;
+  }
+
+  @media (max-width: 860px) {
+    .related-articles__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .related-article {
+      min-height: 260px;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .related-articles {
+      width: min(calc(100% - 28px), var(--max-width));
+    }
+  }
+</style>

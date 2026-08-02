@@ -1,0 +1,84 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+  title?: string;
+}
+
+const {
+  headings,
+  title = 'In this article',
+} = Astro.props;
+
+const visibleHeadings = headings.filter(
+  (heading) => heading.depth === 2 || heading.depth === 3,
+);
+---
+
+{
+  visibleHeadings.length > 0 && (
+    <nav class="article-toc" aria-labelledby="article-toc-title">
+      <p id="article-toc-title" class="article-toc__title">
+        {title}
+      </p>
+
+      <ol>
+        {
+          visibleHeadings.map((heading) => (
+            <li class:list={{ 'article-toc__subitem': heading.depth === 3 }}>
+              <a href={`#${heading.slug}`}>{heading.text}</a>
+            </li>
+          ))
+        }
+      </ol>
+    </nav>
+  )
+}
+
+<style>
+  .article-toc {
+    margin-block: 2.5rem;
+    padding-block: 1.25rem;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .article-toc__title {
+    margin: 0 0 0.8rem;
+    color: var(--accent);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .article-toc ol {
+    margin: 0;
+    padding-left: 1.25rem;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .article-toc a {
+    color: var(--text);
+    font-size: 0.9rem;
+    text-decoration-color: var(--border);
+    text-underline-offset: 3px;
+  }
+
+  .article-toc a:hover,
+  .article-toc a:focus-visible {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+  }
+
+  .article-toc__subitem {
+    margin-left: 1rem;
+    color: var(--text-soft);
+  }
+</style>

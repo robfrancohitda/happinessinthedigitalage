@@ -11,6 +11,13 @@ import {
 export const articleSchema = z.object({
   title: z.string().min(10).max(110),
   description: z.string().min(40).max(180),
+
+  openingContext: z
+    .array(z.string().min(40).max(700))
+    .min(1)
+    .max(3)
+    .optional(),
+
   answerSummary: z.string().min(40).max(600),
 
   publishedAt: z.coerce.date(),
@@ -86,6 +93,15 @@ export const articleSchema = z.object({
       path: ['hero'],
       message:
         'Published articles require desktop and mobile hero images.',
+    });
+  }
+
+  if (!article.draft && !article.openingContext) {
+    context.addIssue({
+      code: 'custom',
+      path: ['openingContext'],
+      message:
+        'Published articles require a broad opening context.',
     });
   }
 });

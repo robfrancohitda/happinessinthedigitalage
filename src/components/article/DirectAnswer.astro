@@ -1,0 +1,56 @@
+---
+interface Props {
+  answer: string;
+  label?: string;
+}
+
+const {
+  answer,
+  label = 'The direct answer',
+} = Astro.props;
+---
+
+<section class="direct-answer" aria-labelledby="direct-answer-title">
+  <p class="direct-answer__label">{label}</p>
+  <h2 id="direct-answer-title" class="visually-hidden">
+    {label}
+  </h2>
+  <p class="direct-answer__text">{answer}</p>
+</section>
+
+<style>
+  .direct-answer {
+    margin-block: 2rem 2.5rem;
+    padding: clamp(1.25rem, 4vw, 1.8rem);
+    background: var(--accent-soft);
+    border-left: 4px solid var(--accent);
+  }
+
+  .direct-answer__label {
+    margin: 0 0 0.55rem;
+    color: var(--accent);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .direct-answer__text {
+    margin: 0;
+    color: var(--text);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.2rem, 2.6vw, 1.6rem);
+    line-height: 1.45;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

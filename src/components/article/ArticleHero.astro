@@ -1,0 +1,101 @@
+---
+interface Props {
+  hero: {
+    desktop: {
+      src: string;
+      width: number;
+      height: number;
+    };
+    mobile: {
+      src: string;
+      width: number;
+      height: number;
+    };
+    alt: string;
+    caption?: string;
+    credit?: string;
+  };
+}
+
+const { hero } = Astro.props;
+const hasDetails = Boolean(hero.caption || hero.credit);
+---
+
+<figure class="article-hero">
+  <picture>
+    <source
+      media="(max-width: 767px)"
+      srcset={hero.mobile.src}
+      width={hero.mobile.width}
+      height={hero.mobile.height}
+    />
+
+    <img
+      src={hero.desktop.src}
+      alt={hero.alt}
+      width={hero.desktop.width}
+      height={hero.desktop.height}
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+    />
+  </picture>
+
+  {
+    hasDetails && (
+      <figcaption>
+        {hero.caption && <span>{hero.caption}</span>}
+
+        {
+          hero.caption && hero.credit && (
+            <span aria-hidden="true"> · </span>
+          )
+        }
+
+        {
+          hero.credit && (
+            <span class="article-hero__credit">
+              {hero.credit}
+            </span>
+          )
+        }
+      </figcaption>
+    )
+  }
+</figure>
+
+<style>
+  .article-hero {
+    margin: 0;
+  }
+
+  .article-hero picture,
+  .article-hero img {
+    display: block;
+    width: 100%;
+  }
+
+  .article-hero img {
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background: var(--surface-muted);
+  }
+
+  .article-hero figcaption {
+    margin-top: 0.65rem;
+    color: var(--text-soft);
+    font-size: 0.72rem;
+    line-height: 1.45;
+  }
+
+  .article-hero__credit {
+    white-space: nowrap;
+  }
+
+  @media (max-width: 767px) {
+    .article-hero img {
+      aspect-ratio: 4 / 5;
+    }
+  }
+</style>

@@ -1,0 +1,118 @@
+---
+interface Source {
+  title: string;
+  url: string;
+  publisher?: string;
+  publishedAt?: Date;
+  accessedAt?: Date;
+}
+
+interface Props {
+  sources: Source[];
+  heading?: string;
+}
+
+const {
+  sources,
+  heading = 'Sources and references',
+} = Astro.props;
+
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+});
+---
+
+{
+  sources.length > 0 && (
+    <section
+      class="article-references"
+      aria-labelledby="article-references-title"
+    >
+      <h2 id="article-references-title">{heading}</h2>
+
+      <ol>
+        {
+          sources.map((source) => (
+            <li>
+              <a
+                href={source.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {source.title}
+              </a>
+
+              {
+                source.publisher && (
+                  <span> — {source.publisher}</span>
+                )
+              }
+
+              {
+                source.publishedAt && (
+                  <span>
+                    {' '}
+                    ({dateFormatter.format(source.publishedAt)})
+                  </span>
+                )
+              }
+
+              {
+                source.accessedAt && (
+                  <small>
+                    Accessed {dateFormatter.format(source.accessedAt)}
+                  </small>
+                )
+              }
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+  )
+}
+
+<style>
+  .article-references {
+    margin-top: clamp(3.5rem, 7vw, 5.5rem);
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .article-references > h2 {
+    margin: 0 0 1.2rem;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.65rem, 3vw, 2.25rem);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+  }
+
+  .article-references ol {
+    margin: 0;
+    padding-left: 1.3rem;
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .article-references li {
+    padding-left: 0.25rem;
+    color: var(--text-soft);
+    font-size: 0.82rem;
+    line-height: 1.55;
+  }
+
+  .article-references a {
+    color: var(--text);
+    font-weight: 700;
+    text-underline-offset: 3px;
+  }
+
+  .article-references small {
+    display: block;
+    margin-top: 0.2rem;
+    color: var(--text-soft);
+    font-size: 0.72rem;
+  }
+</style>

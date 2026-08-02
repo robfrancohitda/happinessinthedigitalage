@@ -1,0 +1,121 @@
+---
+import {
+  getRelatedArticles,
+  type ArticleEntry,
+} from '../lib/articles';
+
+import ArticleBreadcrumbs from '../components/article/ArticleBreadcrumbs.astro';
+import ArticleFaq from '../components/article/ArticleFaq.astro';
+import ArticleHero from '../components/article/ArticleHero.astro';
+import ArticleMeta from '../components/article/ArticleMeta.astro';
+import ArticleReferences from '../components/article/ArticleReferences.astro';
+import ArticleToc from '../components/article/ArticleToc.astro';
+import DirectAnswer from '../components/article/DirectAnswer.astro';
+import KeyTakeaways from '../components/article/KeyTakeaways.astro';
+import RelatedArticles from '../components/article/RelatedArticles.astro';
+import BaseLayout from './BaseLayout.astro';
+
+import '../styles/article.css';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  article: ArticleEntry;
+  headings: Heading[];
+  authorName?: string;
+  readingTimeMinutes?: number;
+  noindex?: boolean;
+}
+
+const {
+  article,
+  headings,
+  authorName = 'HITDA Editorial Team',
+  readingTimeMinutes,
+  noindex = false,
+} = Astro.props;
+
+const { data } = article;
+
+if (!data.hero) {
+  throw new Error(
+    `Article "${article.id}" cannot use ArticleLayout without hero images.`,
+  );
+}
+
+const openingContext = data.openingContext ?? [];
+
+const relatedArticles = await getRelatedArticles(article, 3);
+---
+
+<BaseLayout
+  title={data.seoTitle ?? data.title}
+  description={data.description}
+  image={data.hero.desktop.src}
+  type="article"
+  noindex={noindex}
+>
+  <article class="article-page">
+    <header class="article-header">
+      <ArticleBreadcrumbs
+        contentType={data.contentType}
+        title={data.title}
+      />
+
+      <ArticleMeta
+        contentType={data.contentType}
+        category={data.category}
+        authorName={authorName}
+        publishedAt={data.publishedAt}
+        updatedAt={data.updatedAt}
+        readingTimeMinutes={readingTimeMinutes}
+      />
+
+      <div class="article-header__title">
+        <h1>{data.title}</h1>
+        <p>{data.description}</p>
+      </div>
+    </header>
+
+    <div class="article-hero-container">
+      <ArticleHero hero={data.hero} />
+    </div>
+
+    <div class="article-reading-column">
+      {
+        openingContext.length > 0 && (
+          <section
+            class="article-opening"
+            aria-label="Introduction"
+          >
+            {
+              openingContext.map((paragraph) => (
+                <p>{paragraph}</p>
+              ))
+            }
+          </section>
+        )
+      }
+
+      <DirectAnswer answer={data.answerSummary} />
+
+      <KeyTakeaways items={data.keyTakeaways} />
+
+      <ArticleToc headings={headings} />
+
+      <div class="article-body">
+        <slot />
+      </div>
+
+      <ArticleFaq items={data.faq} />
+
+      <ArticleReferences sources={data.sources} />
+    </div>
+
+    <RelatedArticles articles={relatedArticles} />
+  </article>
+</BaseLayout>

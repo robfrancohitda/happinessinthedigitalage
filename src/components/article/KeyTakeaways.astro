@@ -1,0 +1,53 @@
+---
+interface Props {
+  items: string[];
+  heading?: string;
+}
+
+const {
+  items,
+  heading = 'Key takeaways',
+} = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <section
+      class="key-takeaways"
+      aria-labelledby="key-takeaways-title"
+    >
+      <h2 id="key-takeaways-title">{heading}</h2>
+
+      <ul>
+        {items.map((item) => <li>{item}</li>)}
+      </ul>
+    </section>
+  )
+}
+
+<style>
+  .key-takeaways {
+    margin-block: 2.5rem;
+    padding: clamp(1.25rem, 4vw, 1.8rem);
+    background: var(--surface-warm, #f0eee6);
+  }
+
+  .key-takeaways h2 {
+    margin: 0 0 1rem;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.35rem;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+  }
+
+  .key-takeaways ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    display: grid;
+    gap: 0.65rem;
+  }
+
+  .key-takeaways li::marker {
+    color: var(--accent);
+  }
+</style>

@@ -1,0 +1,118 @@
+---
+import {
+  articleTypeLabel,
+  type ArticleContentType,
+} from '../../lib/articles';
+
+interface Props {
+  contentType: ArticleContentType;
+  category: string;
+  authorName: string;
+  publishedAt: Date;
+  updatedAt?: Date;
+  readingTimeMinutes?: number;
+}
+
+const {
+  contentType,
+  category,
+  authorName,
+  publishedAt,
+  updatedAt,
+  readingTimeMinutes,
+} = Astro.props;
+
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+});
+
+const categoryLabel = category
+  .replaceAll('-', ' ')
+  .replace(/\b\w/g, (letter) => letter.toUpperCase());
+---
+
+<div class="article-meta">
+  <div class="article-meta__classification">
+    <span>{articleTypeLabel[contentType]}</span>
+    <span aria-hidden="true">·</span>
+    <span>{categoryLabel}</span>
+  </div>
+
+  <div class="article-meta__details">
+    <span class="article-meta__author">
+      By {authorName}
+    </span>
+
+    <span>
+      Published
+      <time datetime={publishedAt.toISOString()}>
+        {dateFormatter.format(publishedAt)}
+      </time>
+    </span>
+
+    {
+      updatedAt && (
+        <span>
+          Updated
+          <time datetime={updatedAt.toISOString()}>
+            {dateFormatter.format(updatedAt)}
+          </time>
+        </span>
+      )
+    }
+
+    {
+      readingTimeMinutes && (
+        <span>{readingTimeMinutes} min read</span>
+      )
+    }
+  </div>
+</div>
+
+<style>
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem 2rem;
+    color: var(--text-soft);
+    font-size: 0.74rem;
+  }
+
+  .article-meta__classification,
+  .article-meta__details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.65rem;
+  }
+
+  .article-meta__classification {
+    color: var(--accent);
+    font-weight: 800;
+    letter-spacing: 0.075em;
+    text-transform: uppercase;
+  }
+
+  .article-meta__details span {
+    display: flex;
+    gap: 0.3rem;
+  }
+
+  .article-meta__author,
+  .article-meta time {
+    color: var(--text);
+  }
+
+  @media (max-width: 680px) {
+    .article-meta,
+    .article-meta__details {
+      flex-direction: column;
+    }
+
+    .article-meta__details {
+      gap: 0.25rem;
+    }
+  }
+</style>

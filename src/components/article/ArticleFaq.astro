@@ -1,0 +1,78 @@
+---
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  items: FaqItem[];
+  heading?: string;
+}
+
+const {
+  items,
+  heading = 'Frequently asked questions',
+} = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <section
+      class="article-faq"
+      aria-labelledby="article-faq-title"
+    >
+      <h2 id="article-faq-title">{heading}</h2>
+
+      <div class="article-faq__items">
+        {
+          items.map((item) => (
+            <details class="article-faq__item">
+              <summary>{item.question}</summary>
+              <p>{item.answer}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .article-faq {
+    margin-top: clamp(4rem, 8vw, 6.5rem);
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .article-faq > h2 {
+    margin: 0 0 1.5rem;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    line-height: 1.08;
+  }
+
+  .article-faq__items {
+    border-top: 1px solid var(--border);
+  }
+
+  .article-faq__item {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .article-faq__item summary {
+    padding-block: 1.15rem;
+    color: var(--text);
+    cursor: pointer;
+    font-weight: 750;
+    list-style-position: outside;
+  }
+
+  .article-faq__item p {
+    max-width: 680px;
+    margin: 0;
+    padding: 0 0 1.4rem 1.2rem;
+    color: var(--text-soft);
+  }
+</style>
