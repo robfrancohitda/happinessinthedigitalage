@@ -1034,3 +1034,166 @@
 }
 
 /* FIM — enquadramento final da home */
+
+/* HITDA — ajuste definitivo desktop */
+
+@media (min-width: 1101px) {
+  .hitda-hero {
+    grid-template-columns:
+      minmax(0, .95fr)
+      minmax(0, 1.05fr);
+  }
+
+  .hitda-hero__copy,
+  .hitda-hero__visual,
+  .featured-review__copy,
+  .featured-review__visual {
+    min-width: 0;
+  }
+
+  .hitda-hero__copy {
+    padding:
+      clamp(60px, 6vw, 92px)
+      clamp(38px, 4vw, 60px);
+    overflow: hidden;
+  }
+
+  .hitda-hero h1 {
+    width: 100%;
+    max-width: 100%;
+    font-family: var(--hitda-display);
+    font-size: clamp(3.6rem, 4.5vw, 4.8rem);
+    font-weight: 400;
+    line-height: .9;
+    letter-spacing: -.055em;
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
+  }
+
+  .hitda-hero h1 em {
+    display: block;
+  }
+
+  .visual-block--main strong {
+    max-width: 100%;
+    font-family: var(--hitda-display);
+    font-size: clamp(2rem, 2.4vw, 2.65rem);
+    font-weight: 400;
+    line-height: .94;
+    letter-spacing: -.045em;
+  }
+
+  .visual-block--acid strong,
+  .visual-block--paper strong {
+    max-width: 100%;
+    font-family: var(--hitda-display);
+    font-size: clamp(1.5rem, 1.75vw, 1.9rem);
+    font-weight: 400;
+    line-height: .96;
+    letter-spacing: -.04em;
+  }
+
+  .visual-block--wide strong {
+    max-width: 18ch;
+    font-family: var(--hitda-display);
+    font-size: clamp(1.35rem, 1.55vw, 1.7rem);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -.035em;
+  }
+
+  .featured-review {
+    grid-template-columns:
+      minmax(0, .9fr)
+      minmax(0, 1.1fr);
+  }
+
+  .featured-review__copy {
+    padding:
+      clamp(70px, 7vw, 105px)
+      clamp(38px, 4vw, 60px);
+    overflow: hidden;
+  }
+
+  .featured-review h2 {
+    width: 100%;
+    max-width: 11.5ch;
+    font-family: var(--hitda-display);
+    font-size: clamp(2.7rem, 3.35vw, 3.65rem);
+    font-weight: 400;
+    line-height: .93;
+    letter-spacing: -.052em;
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
+  }
+
+  .featured-review__copy .hitda-lead {
+    max-width: 42ch;
+  }
+
+  .hitda-section-heading h2,
+  .closing-section h2,
+  .coverage-card h3,
+  .format-row h3 {
+    font-family: var(--hitda-display);
+    font-weight: 400;
+  }
+}
+
+/* FIM — ajuste definitivo desktop */
+
+/* HITDA — correções visuais finais */
+
+@media (min-width: 1101px) {
+  .review-name {
+    padding: clamp(24px, 3vw, 42px);
+    align-items: center;
+    justify-content: center;
+  }
+
+  .review-name strong {
+    max-height: 100%;
+    font-size: clamp(3.4rem, 4.3vw, 4.75rem);
+    line-height: .8;
+    letter-spacing: -.075em;
+  }
+}
+
+@media (max-width: 680px) {
+  .visual-grid {
+    grid-template-rows:
+      1.08fr
+      .8fr
+      1.12fr;
+  }
+
+  .visual-block--wide {
+    min-height: 0;
+    padding: 16px 14px;
+    align-items: flex-end;
+    gap: 10px;
+    overflow: hidden;
+  }
+
+  .visual-block--wide > div {
+    min-width: 0;
+  }
+
+  .visual-block--wide strong {
+    display: block;
+    max-width: 11ch;
+    font-size: 1.22rem;
+    line-height: .98;
+    letter-spacing: -.035em;
+  }
+
+  .visual-index {
+    flex: 0 0 auto;
+    font-size: 2.7rem;
+    line-height: .8;
+  }
+}
+
+/* FIM — correções visuais finais */

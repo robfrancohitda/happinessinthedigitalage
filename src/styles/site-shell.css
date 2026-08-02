@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Archivo Black";
+  src: url("/assets/fonts/archivo-black-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --hitda-ink: #11130f;
   --hitda-ink-soft: #1a1d18;
@@ -17,9 +25,8 @@
   --hitda-max: 1440px;
   --hitda-radius: 6px;
   --hitda-display:
+    "Archivo Black",
     "Arial Black",
-    "Helvetica Neue",
-    Arial,
     sans-serif;
   --hitda-body:
     Inter,
@@ -583,3 +590,28 @@ main {
     width: calc(100% - 26px);
   }
 }
+
+/* HITDA — ajuste do skip link */
+
+.skip-link {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(calc(-100% - 28px));
+  transition:
+    transform .18s var(--hitda-ease),
+    opacity .18s var(--hitda-ease);
+}
+
+.skip-link:focus {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(calc(-100% - 28px));
+}
+
+.skip-link:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+
+/* FIM — ajuste do skip link */
