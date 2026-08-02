@@ -217,6 +217,48 @@ async function main() {
       audit();
       return;
 
+    case 'new': {
+      const {
+        createArticleDraft,
+      } = await import('./editorial-new.mjs');
+
+      try {
+        createArticleDraft(
+          process.argv.slice(3),
+          root,
+        );
+      } catch (error) {
+        fail(
+          error instanceof Error
+            ? error.message
+            : String(error),
+        );
+      }
+
+      return;
+    }
+
+    case 'publish': {
+      const {
+        publishArticle,
+      } = await import('./editorial-publish.mjs');
+
+      try {
+        publishArticle(
+          process.argv.slice(3),
+          root,
+        );
+      } catch (error) {
+        fail(
+          error instanceof Error
+            ? error.message
+            : String(error),
+        );
+      }
+
+      return;
+    }
+
     case 'verify':
       await verify();
       return;
@@ -228,11 +270,9 @@ HITDA operational interface
 Available:
   ./scripts/hitda check
   ./scripts/hitda audit
+  ./scripts/hitda new <type> <slug or subject>
+  ./scripts/hitda publish <slug>
   ./scripts/hitda verify <url>
-
-Reserved for the editorial module:
-  ./scripts/hitda new
-  ./scripts/hitda publish
 `);
       return;
 
