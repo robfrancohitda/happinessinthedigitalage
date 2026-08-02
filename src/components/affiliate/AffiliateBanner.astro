@@ -1,95 +1,221 @@
 ---
-import { commercialPlacements } from '../../lib/commercial';
+import type {
+  CampaignCreative,
+  Placement,
+} from '../../lib/campaign-selection';
 
-type Placement = (typeof commercialPlacements)[number];
+type CreativeFormat = CampaignCreative['format'];
+
+interface ImageAsset {
+  src: string;
+  width: number;
+  height: number;
+}
+
+interface ResponsiveImages {
+  desktop: ImageAsset;
+  mobile: ImageAsset;
+  alt: string;
+}
 
 interface Props {
   href: string;
-  headline: string;
-  body: string;
+  accessibleLabel: string;
+  format: CreativeFormat;
+
+  headline?: string;
+  body?: string;
   cta?: string;
   label?: string;
-  image?: string;
-  imageAlt?: string;
+  images?: ResponsiveImages;
+
+  network?: string;
+  campaignKind?: string;
   productId?: string;
-  campaignId?: string;
+  campaignId: string;
+  creativeId: string;
   articleId?: string;
-  placement?: Placement;
+  placement: Placement;
 }
 
 const {
   href,
+  accessibleLabel,
+  format,
   headline,
   body,
-  cta = 'See details',
-  label = 'Advertisement',
-  image,
-  imageAlt = '',
+  cta,
+  label = 'Ad',
+  images,
+  network,
+  campaignKind,
   productId,
   campaignId,
+  creativeId,
   articleId,
-  placement = 'article-midpoint',
+  placement,
 } = Astro.props;
+
+const isImageOnly =
+  format === 'image' && Boolean(images);
+
+const hasTextContent =
+  Boolean(headline || body || cta);
+
+const linkLabel =
+  cta ??
+  headline ??
+  accessibleLabel;
+
+const eagerImage =
+  placement === 'article-masthead';
+
+const destinationHost =
+  new URL(href).hostname;
 ---
 
 <aside
-  class="affiliate-banner"
+  class:list={[
+    'affiliate-banner',
+    `affiliate-banner--${placement}`,
+    {
+      'affiliate-banner--image-only': isImageOnly,
+      'affiliate-banner--text-only': !images,
+    },
+  ]}
   aria-label={label}
-  data-commercial-impression="banner_impression"
+  data-commercial-impression="commercial_impression"
+  data-network={network}
+  data-campaign-kind={campaignKind}
   data-product-id={productId}
   data-campaign-id={campaignId}
+  data-creative-id={creativeId}
   data-article-id={articleId}
   data-placement={placement}
 >
-  <small class="affiliate-banner__label">{label}</small>
+  <small class="affiliate-banner__label">
+    {label}
+  </small>
 
-  <div class="affiliate-banner__body">
-    {
-      image && (
-        <img
-          class="affiliate-banner__image"
-          src={image}
-          alt={imageAlt}
-          loading="lazy"
-          decoding="async"
-        />
-      )
-    }
-
-    <div class="affiliate-banner__content">
-      <strong>{headline}</strong>
-      <p>{body}</p>
-
+  {
+    isImageOnly && images ? (
       <a
+        class="affiliate-banner__image-link"
         href={href}
+        aria-label={linkLabel}
         target="_blank"
-        rel="sponsored noopener noreferrer"
-        data-commercial-track="banner_click"
+        rel="sponsored nofollow noopener noreferrer"
+        data-commercial-track="commercial_click"
+        data-network={network}
         data-product-id={productId}
         data-campaign-id={campaignId}
+        data-creative-id={creativeId}
         data-article-id={articleId}
         data-placement={placement}
+        data-destination-host={destinationHost}
       >
-        {cta}
+        <picture class="affiliate-banner__picture">
+          <source
+            media="(max-width: 767px)"
+            srcset={images.mobile.src}
+            width={images.mobile.width}
+            height={images.mobile.height}
+          />
+
+          <img
+            src={images.desktop.src}
+            alt={images.alt}
+            width={images.desktop.width}
+            height={images.desktop.height}
+            loading={eagerImage ? 'eager' : 'lazy'}
+            fetchpriority={eagerImage ? 'high' : 'auto'}
+            decoding="async"
+          />
+        </picture>
       </a>
-    </div>
-  </div>
+    ) : (
+      <div
+        class:list={[
+          'affiliate-banner__body',
+          {
+            'affiliate-banner__body--with-image':
+              Boolean(images),
+          },
+        ]}
+      >
+        {
+          images && (
+            <picture class="affiliate-banner__picture">
+              <source
+                media="(max-width: 767px)"
+                srcset={images.mobile.src}
+                width={images.mobile.width}
+                height={images.mobile.height}
+              />
+
+              <img
+                src={images.desktop.src}
+                alt={images.alt}
+                width={images.desktop.width}
+                height={images.desktop.height}
+                loading={eagerImage ? 'eager' : 'lazy'}
+                fetchpriority={eagerImage ? 'high' : 'auto'}
+                decoding="async"
+              />
+            </picture>
+          )
+        }
+
+        {
+          hasTextContent && (
+            <div class="affiliate-banner__content">
+              {headline && <strong>{headline}</strong>}
+              {body && <p>{body}</p>}
+
+              {
+                cta && (
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="sponsored nofollow noopener noreferrer"
+                    data-commercial-track="commercial_click"
+                    data-network={network}
+                    data-product-id={productId}
+                    data-campaign-id={campaignId}
+                    data-creative-id={creativeId}
+                    data-article-id={articleId}
+                    data-placement={placement}
+                    data-destination-host={destinationHost}
+                  >
+                    {cta}
+                    <span aria-hidden="true">→</span>
+                  </a>
+                )
+              }
+            </div>
+          )
+        }
+      </div>
+    )
+  }
 </aside>
 
 <style>
   .affiliate-banner {
     margin-block: 2rem;
     padding: 0.75rem;
-    border: 1px solid var(--color-border, #d9dde3);
-    border-radius: 0.75rem;
-    background: var(--color-surface-muted, #f5f6f8);
+    overflow: hidden;
+    background: var(--surface-muted, #f5f6f8);
+    border: 1px solid var(--border, #d9dde3);
   }
 
   .affiliate-banner__label {
     display: block;
-    margin-bottom: 0.5rem;
-    color: var(--color-muted, #5f6875);
-    font-size: 0.7rem;
+    margin-bottom: 0.45rem;
+    color: var(--text-soft, #5f6875);
+    font-size: 0.62rem;
+    line-height: 1;
+    letter-spacing: 0.04em;
   }
 
   .affiliate-banner__body {
@@ -98,29 +224,115 @@ const {
     align-items: center;
   }
 
-  .affiliate-banner__image {
+  .affiliate-banner__picture,
+  .affiliate-banner__picture img {
+    display: block;
     width: 100%;
-    max-height: 220px;
+  }
+
+  .affiliate-banner__picture img {
+    height: auto;
     object-fit: cover;
-    border-radius: 0.5rem;
+  }
+
+  .affiliate-banner__image-link {
+    display: block;
+  }
+
+  .affiliate-banner__content {
+    padding: clamp(0.4rem, 2vw, 1rem);
   }
 
   .affiliate-banner__content strong {
     display: block;
-    font-size: 1.15rem;
+    color: var(--text);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.2rem, 2.8vw, 1.75rem);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.12;
   }
 
   .affiliate-banner__content p {
-    margin-block: 0.5rem 0.75rem;
+    margin: 0.65rem 0 1rem;
+    color: var(--text-soft);
+    font-size: 0.88rem;
+    line-height: 1.55;
   }
 
   .affiliate-banner__content a {
-    font-weight: 700;
+    display: inline-flex;
+    gap: 0.4rem;
+    align-items: center;
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-decoration: none;
   }
 
-  @media (min-width: 700px) {
-    .affiliate-banner__body:has(.affiliate-banner__image) {
-      grid-template-columns: minmax(180px, 0.4fr) minmax(0, 1fr);
+  .affiliate-banner__content a:hover,
+  .affiliate-banner__content a:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .affiliate-banner--article-inline-text {
+    padding: 1rem;
+    border-left: 3px solid var(--accent);
+  }
+
+  .affiliate-banner--article-inline-text
+    .affiliate-banner__content {
+    padding: 0.25rem 0.5rem 0.5rem;
+  }
+
+  .affiliate-banner--article-masthead {
+    margin-block: 1rem 2rem;
+  }
+
+  .affiliate-banner--article-visual-card
+    .affiliate-banner__picture img {
+    aspect-ratio: 16 / 9;
+  }
+
+  .affiliate-banner--article-final-banner
+    .affiliate-banner__picture img {
+    aspect-ratio: 3 / 1;
+  }
+
+  .affiliate-banner--image-only {
+    padding: 0.55rem;
+  }
+
+  @media (min-width: 768px) {
+    .affiliate-banner__body--with-image {
+      grid-template-columns:
+        minmax(220px, 0.9fr)
+        minmax(0, 1.1fr);
+    }
+
+    .affiliate-banner--article-visual-card
+      .affiliate-banner__body--with-image {
+      grid-template-columns: 1fr;
+    }
+
+    .affiliate-banner--article-final-banner
+      .affiliate-banner__body--with-image {
+      grid-template-columns:
+        minmax(300px, 1.2fr)
+        minmax(0, 0.8fr);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .affiliate-banner--article-visual-card
+      .affiliate-banner__picture img {
+      aspect-ratio: 4 / 5;
+    }
+
+    .affiliate-banner--article-final-banner
+      .affiliate-banner__picture img {
+      aspect-ratio: 2 / 1;
     }
   }
 </style>

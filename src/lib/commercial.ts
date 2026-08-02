@@ -7,6 +7,7 @@ export const contentTypes = [
 ] as const;
 
 export const offerRelationships = [
+  'exact',
   'contextual',
   'vertical',
   'adjacent',
@@ -17,7 +18,14 @@ export const offerRelationships = [
 export const campaignKinds = [
   'affiliate',
   'house',
+  'direct-sponsor',
   'programmatic',
+] as const;
+
+export const campaignCreativeFormats = [
+  'text',
+  'structured',
+  'image',
 ] as const;
 
 export const commercialPlacements = [
@@ -41,6 +49,8 @@ export const campaignStatuses = [
   'draft',
   'active',
   'paused',
+  'expired',
+  'archived',
   'retired',
 ] as const;
 

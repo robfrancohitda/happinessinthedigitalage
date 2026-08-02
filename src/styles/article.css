@@ -218,3 +218,43 @@
     overflow-x: auto;
   }
 }
+
+/* Article advertising containers */
+
+.article-ad {
+  width: min(
+    calc(100% - 40px),
+    var(--max-width)
+  );
+  margin-inline: auto;
+}
+
+.article-ad:empty {
+  display: none;
+}
+
+.article-ad--masthead {
+  margin-block: 1rem clamp(1rem, 3vw, 2rem);
+}
+
+.article-ad--final-banner {
+  margin-top: clamp(4rem, 8vw, 7rem);
+}
+
+.article-body
+  > .affiliate-banner:first-child {
+  margin-top: 0;
+}
+
+@media (max-width: 760px) {
+  .article-ad {
+    width: min(
+      calc(100% - 28px),
+      var(--max-width)
+    );
+  }
+
+  .article-ad--masthead {
+    margin-top: 0.75rem;
+  }
+}

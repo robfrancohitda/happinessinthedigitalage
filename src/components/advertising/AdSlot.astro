@@ -2,17 +2,22 @@
 import { getCollection } from 'astro:content';
 
 import AffiliateBanner from '../affiliate/AffiliateBanner.astro';
-import { commercialPlacements } from '../../lib/commercial';
-import { selectCampaign } from '../../lib/campaign-selection';
 
-type Placement = (typeof commercialPlacements)[number];
+import {
+  selectCampaign,
+  selectCampaignCreative,
+  type ContentType,
+  type Placement,
+} from '../../lib/campaign-selection';
 
 interface Props {
   placement: Placement;
   articleId?: string;
+  contentType?: ContentType;
   vertical?: string;
   category?: string;
   topic?: string;
+  tags?: string[];
   preferredCampaignIds?: string[];
   allowGlobalCampaigns?: boolean;
 }
@@ -20,24 +25,61 @@ interface Props {
 const {
   placement,
   articleId,
+  contentType,
   vertical,
   category,
   topic,
+  tags = [],
   preferredCampaignIds = [],
   allowGlobalCampaigns = true,
 } = Astro.props;
 
-const campaigns = await getCollection('campaigns');
+const campaigns =
+  await getCollection('campaigns');
 
 const campaign = selectCampaign(campaigns, {
   placement,
   articleId,
+  contentType,
   vertical,
   category,
   topic,
+  tags,
   preferredCampaignIds,
   allowGlobalCampaigns,
 });
+
+const creative = campaign
+  ? selectCampaignCreative(
+      campaign,
+      placement,
+      articleId,
+    )
+  : undefined;
+
+const legacyCreative =
+  campaign?.data.creative;
+
+const creativeId =
+  creative?.id ??
+  (campaign
+    ? `${campaign.id}--legacy`
+    : undefined);
+
+const creativeFormat =
+  creative?.format ?? 'structured';
+
+const creativeHeadline =
+  creative?.headline ??
+  legacyCreative?.headline;
+
+const creativeBody =
+  creative?.body ??
+  legacyCreative?.body;
+
+const creativeCta =
+  creative?.cta ??
+  legacyCreative?.cta;
 ---
 
 {
@@ -46,7 +88,8 @@ const campaign = selectCampaign(campaigns, {
       class="ad-slot ad-slot--programmatic"
       aria-label={campaign.data.disclosureLabel}
       data-programmatic-slot={placement}
-      data-commercial-impression="banner_impression"
+      data-commercial-impression="commercial_impression"
+      data-network={campaign.data.network}
       data-campaign-id={campaign.id}
       data-campaign-kind={campaign.data.kind}
       data-article-id={articleId}
@@ -55,17 +98,21 @@ const campaign = selectCampaign(campaigns, {
       <small>{campaign.data.disclosureLabel}</small>
       <div class="ad-slot__provider-container"></div>
     </aside>
-  ) : campaign ? (
+  ) : campaign && creativeId ? (
     <AffiliateBanner
       href={campaign.data.destinationUrl}
-      headline={campaign.data.creative.headline}
-      body={campaign.data.creative.body}
-      cta={campaign.data.creative.cta}
+      accessibleLabel={campaign.data.name}
+      format={creativeFormat}
+      headline={creativeHeadline}
+      body={creativeBody}
+      cta={creativeCta}
       label={campaign.data.disclosureLabel}
-      image={campaign.data.creative.image}
-      imageAlt={campaign.data.creative.alt}
+      images={creative?.images}
+      network={campaign.data.network}
+      campaignKind={campaign.data.kind}
       productId={campaign.data.productId}
       campaignId={campaign.id}
+      creativeId={creativeId}
       articleId={articleId}
       placement={placement}
     />
@@ -77,16 +124,15 @@ const campaign = selectCampaign(campaigns, {
     margin-block: 2rem;
     min-height: 90px;
     padding: 0.75rem;
-    border: 1px solid var(--color-border, #d9dde3);
-    border-radius: 0.75rem;
-    background: var(--color-surface-muted, #f5f6f8);
+    background: var(--surface-muted, #f5f6f8);
+    border: 1px solid var(--border, #d9dde3);
   }
 
   .ad-slot--programmatic small {
     display: block;
     margin-bottom: 0.5rem;
-    color: var(--color-muted, #5f6875);
-    font-size: 0.7rem;
+    color: var(--text-soft, #5f6875);
+    font-size: 0.62rem;
   }
 
   .ad-slot__provider-container {

@@ -4,6 +4,11 @@ import {
   type ArticleEntry,
 } from '../lib/articles';
 
+import {
+  splitArticleBodyHtml,
+} from '../lib/article-body-segmentation';
+
+import AdSlot from '../components/advertising/AdSlot.astro';
 import ArticleBreadcrumbs from '../components/article/ArticleBreadcrumbs.astro';
 import ArticleFaq from '../components/article/ArticleFaq.astro';
 import ArticleHero from '../components/article/ArticleHero.astro';
@@ -50,6 +55,28 @@ if (!data.hero) {
 const openingContext = data.openingContext ?? [];
 
 const relatedArticles = await getRelatedArticles(article, 3);
+
+const articleBodyHtml =
+  await Astro.slots.render('default');
+
+const bodySegments =
+  splitArticleBodyHtml(articleBodyHtml);
+
+const enabledPlacements =
+  new Set(data.commercial.placements);
+
+const adContext = {
+  articleId: article.id,
+  contentType: data.contentType,
+  vertical: data.vertical,
+  category: data.category,
+  topic: data.topic,
+  tags: data.tags,
+  preferredCampaignIds:
+    data.commercial.campaignIds,
+  allowGlobalCampaigns:
+    data.commercial.allowGlobalCampaigns,
+};
 ---
 
 <BaseLayout
@@ -60,6 +87,17 @@ const relatedArticles = await getRelatedArticles(article, 3);
   noindex={noindex}
 >
   <article class="article-page">
+    {
+      enabledPlacements.has('article-masthead') && (
+        <div class="article-ad article-ad--masthead">
+          <AdSlot
+            {...adContext}
+            placement="article-masthead"
+          />
+        </div>
+      )
+    }
+
     <header class="article-header">
       <ArticleBreadcrumbs
         contentType={data.contentType}
@@ -108,13 +146,54 @@ const relatedArticles = await getRelatedArticles(article, 3);
       <ArticleToc headings={headings} />
 
       <div class="article-body">
-        <slot />
+        <Fragment
+          set:html={bodySegments.beforeInline}
+        />
+
+        {
+          bodySegments.insertInline &&
+          enabledPlacements.has('article-inline-text') && (
+            <AdSlot
+              {...adContext}
+              placement="article-inline-text"
+            />
+          )
+        }
+
+        <Fragment
+          set:html={bodySegments.betweenAds}
+        />
+
+        {
+          bodySegments.insertVisual &&
+          enabledPlacements.has('article-visual-card') && (
+            <AdSlot
+              {...adContext}
+              placement="article-visual-card"
+            />
+          )
+        }
+
+        <Fragment
+          set:html={bodySegments.afterVisual}
+        />
       </div>
 
       <ArticleFaq items={data.faq} />
 
       <ArticleReferences sources={data.sources} />
     </div>
+
+    {
+      enabledPlacements.has('article-final-banner') && (
+        <div class="article-ad article-ad--final-banner">
+          <AdSlot
+            {...adContext}
+            placement="article-final-banner"
+          />
+        </div>
+      )
+    }
 
     <RelatedArticles articles={relatedArticles} />
   </article>
