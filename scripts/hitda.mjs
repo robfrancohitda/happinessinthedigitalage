@@ -175,34 +175,319 @@ function audit() {
   console.log('\nAuditoria HITDA concluída.');
 }
 
-async function verify() {
-  const baseUrl = process.argv[3];
+const siteName =
+  'Happiness in the Digital Age';
 
-  if (!baseUrl) {
-    fail('informe a URL: ./scripts/hitda verify https://exemplo.pages.dev');
+function decodeHtmlEntities(value) {
+  return value
+    .replace(
+      /&#x([0-9a-f]+);/gi,
+      (_, code) =>
+        String.fromCodePoint(
+          Number.parseInt(code, 16),
+        ),
+    )
+    .replace(
+      /&#([0-9]+);/g,
+      (_, code) =>
+        String.fromCodePoint(
+          Number.parseInt(code, 10),
+        ),
+    )
+    .replaceAll('&amp;', '&')
+    .replaceAll('&quot;', '"')
+    .replaceAll('&#39;', "'")
+    .replaceAll('&lt;', '<')
+    .replaceAll('&gt;', '>');
+}
+
+function normalizeHtmlText(value) {
+  return decodeHtmlEntities(value)
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function getAttribute(tag, attributeName) {
+  const expression = new RegExp(
+    `\\b${attributeName}\\s*=\\s*` +
+    `(?:"([^"]*)"|'([^']*)')`,
+    'i',
+  );
+
+  const match = tag.match(expression);
+
+  return match
+    ? decodeHtmlEntities(
+        match[1] ?? match[2] ?? '',
+      )
+    : undefined;
+}
+
+function getElementText(html, tagName) {
+  const expression = new RegExp(
+    `<${tagName}\\b[^>]*>([\\s\\S]*?)<\\/${tagName}>`,
+    'i',
+  );
+
+  const match = html.match(expression);
+
+  return match
+    ? normalizeHtmlText(match[1])
+    : undefined;
+}
+
+function getMetaContent(
+  html,
+  attributeName,
+  attributeValue,
+) {
+  const tags =
+    html.match(/<meta\b[^>]*>/gi) ?? [];
+
+  for (const tag of tags) {
+    const value =
+      getAttribute(tag, attributeName);
+
+    if (
+      value?.toLowerCase() ===
+      attributeValue.toLowerCase()
+    ) {
+      return getAttribute(tag, 'content');
+    }
   }
 
-  const url = new URL('/', baseUrl);
-  const response = await fetch(url, {
-    redirect: 'follow',
-    signal: AbortSignal.timeout(20000),
-  });
+  return undefined;
+}
+
+function getCanonical(html) {
+  const tags =
+    html.match(/<link\b[^>]*>/gi) ?? [];
+
+  for (const tag of tags) {
+    const rel =
+      getAttribute(tag, 'rel');
+
+    if (
+      rel
+        ?.toLowerCase()
+        .split(/\s+/)
+        .includes('canonical')
+    ) {
+      return getAttribute(tag, 'href');
+    }
+  }
+
+  return undefined;
+}
+
+function normalizePublicUrl(value) {
+  const url = new URL(value);
+
+  url.search = '';
+  url.hash = '';
+
+  return url.toString();
+}
+
+async function verify() {
+  const rawUrl =
+    process.argv[3];
+
+  const expectedTitle =
+    process.argv
+      .slice(4)
+      .join(' ')
+      .trim();
+
+  if (!rawUrl) {
+    fail(
+      'informe a URL: ' +
+      './scripts/hitda verify <url> [expected title] [expected title]',
+    );
+  }
+
+  let requestedUrl;
+
+  try {
+    requestedUrl =
+      new URL(rawUrl);
+  } catch {
+    fail(`URL inválida: ${rawUrl}`);
+  }
+
+  const response =
+    await fetch(requestedUrl, {
+      redirect: 'follow',
+
+      headers: {
+        'cache-control': 'no-cache',
+      },
+
+      signal:
+        AbortSignal.timeout(20000),
+    });
 
   if (!response.ok) {
-    fail(`resposta HTTP inesperada: ${response.status}`);
+    fail(
+      `resposta HTTP inesperada: ${response.status}`,
+    );
   }
 
-  const html = await response.text();
+  const html =
+    await response.text();
 
-  if (!html.includes('<html lang="en"')) {
-    fail('atributo lang="en" não encontrado no HTML publicado');
+  const finalUrl =
+    normalizePublicUrl(response.url);
+
+  if (
+    !/<html\b[^>]*\blang=["']en["']/i.test(
+      html,
+    )
+  ) {
+    fail(
+      'atributo lang="en" não encontrado.',
+    );
   }
 
-  if (!html.includes('Happiness in the Digital Age')) {
-    fail('nome do projeto não encontrado no HTML publicado');
+  if (!html.includes(siteName)) {
+    fail(
+      'nome do projeto não encontrado no HTML.',
+    );
   }
 
-  console.log(`Verificação remota aprovada: ${response.url}`);
+  const documentTitle =
+    getElementText(html, 'title');
+
+  if (!documentTitle) {
+    fail('elemento <title> não encontrado.');
+  }
+
+  if (!documentTitle.includes(siteName)) {
+    fail(
+      'o título SEO não contém o nome do site.',
+    );
+  }
+
+  const canonical =
+    getCanonical(html);
+
+  if (!canonical) {
+    fail('canonical não encontrado.');
+  }
+
+  const normalizedCanonical =
+    normalizePublicUrl(canonical);
+
+  if (normalizedCanonical !== finalUrl) {
+    fail(
+      'canonical divergente:\n' +
+      `Esperado: ${finalUrl}\n` +
+      `Encontrado: ${normalizedCanonical}`,
+    );
+  }
+
+  const ogTitle =
+    getMetaContent(
+      html,
+      'property',
+      'og:title',
+    );
+
+  if (ogTitle !== documentTitle) {
+    fail(
+      'og:title não corresponde ao título SEO.',
+    );
+  }
+
+  const twitterTitle =
+    getMetaContent(
+      html,
+      'name',
+      'twitter:title',
+    );
+
+  if (twitterTitle !== documentTitle) {
+    fail(
+      'twitter:title não corresponde ao título SEO.',
+    );
+  }
+
+  const ogUrl =
+    getMetaContent(
+      html,
+      'property',
+      'og:url',
+    );
+
+  if (
+    !ogUrl ||
+    normalizePublicUrl(ogUrl) !==
+      normalizedCanonical
+  ) {
+    fail(
+      'og:url não corresponde ao canonical.',
+    );
+  }
+
+  const robots =
+    getMetaContent(
+      html,
+      'name',
+      'robots',
+    );
+
+  if (
+    robots
+      ?.toLowerCase()
+      .includes('noindex')
+  ) {
+    fail(
+      'a página publicada contém noindex.',
+    );
+  }
+
+  let heading;
+
+  if (expectedTitle) {
+    heading =
+      getElementText(html, 'h1');
+
+    if (!heading) {
+      fail('elemento <h1> não encontrado.');
+    }
+
+    if (heading !== expectedTitle) {
+      fail(
+        'título público divergente:\n' +
+        `Esperado: ${expectedTitle}\n` +
+        `Encontrado: ${heading}`,
+      );
+    }
+  }
+
+  console.log('');
+  console.log('Verificação remota aprovada.');
+  console.log(`URL: ${finalUrl}`);
+  console.log(`HTTP: ${response.status}`);
+  console.log('Idioma: en');
+  console.log(`Título SEO: ${documentTitle}`);
+
+  if (heading) {
+    console.log(`Título público: ${heading}`);
+  }
+
+  console.log(
+    `Canonical: ${normalizedCanonical}`,
+  );
+
+  console.log(
+    'Metadados sociais: OK',
+  );
+
+  console.log(
+    'Indexação permitida: OK',
+  );
 }
 
 async function main() {
@@ -272,7 +557,7 @@ Available:
   ./scripts/hitda audit
   ./scripts/hitda new <type> <slug or subject>
   ./scripts/hitda publish <slug> [--local]
-  ./scripts/hitda verify <url>
+  ./scripts/hitda verify <url> [expected title]
 `);
       return;
 
