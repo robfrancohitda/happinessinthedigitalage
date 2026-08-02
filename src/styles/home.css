@@ -1197,3 +1197,33 @@
 }
 
 /* FIM — correções visuais finais */
+
+/* HITDA — imagem final responsiva */
+
+.closing-section__media {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--hitda-paper);
+  aspect-ratio: 4 / 3;
+}
+
+.closing-section__media picture,
+.closing-section__media img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.closing-section__media img {
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (max-width: 680px) {
+  .closing-section__media {
+    aspect-ratio: 4 / 5;
+  }
+}
+
+/* FIM — imagem final responsiva */
