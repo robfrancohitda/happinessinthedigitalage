@@ -21,8 +21,6 @@ import RelatedArticles from '../components/article/RelatedArticles.astro';
 import BaseLayout from './BaseLayout.astro';
 
 import '../styles/article.css';
-import '../styles/premium-article.css';
-
 interface Heading {
   depth: number;
   slug: string;
@@ -117,7 +115,6 @@ const adContext = {
         readingTimeMinutes={readingTimeMinutes}
       />
 
-
       {
         hasAffiliateRelationship && (
           <p class="article-affiliate-note">
@@ -211,7 +208,6 @@ const adContext = {
     <RelatedArticles articles={relatedArticles} />
   </article>
 </BaseLayout>
-
 
 <style>
   .article-affiliate-note {
