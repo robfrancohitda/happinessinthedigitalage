@@ -13,6 +13,11 @@ import {
   spawnSync,
 } from 'node:child_process';
 
+import {
+  prepareArticleRelease,
+  releaseArticle,
+} from './editorial-release.mjs';
+
 const articleSectionByType = {
   guide: 'guides',
   explainer: 'explainers',
@@ -195,6 +200,8 @@ function validateHeroAssets(
     );
   }
 
+  const assetPaths = [];
+
   for (const source of sources) {
     if (!source.startsWith('/assets/')) {
       throw new Error(
@@ -213,18 +220,39 @@ function validateHeroAssets(
         `asset do hero não encontrado: ${source}`,
       );
     }
+
+    assetPaths.push(localPath);
   }
+
+  return assetPaths;
 }
 
-export function publishArticle(
+export async function publishArticle(
   args,
   root,
 ) {
-  const rawSlug = args[0];
+  const localOnly =
+    args.includes('--local');
 
-  if (!rawSlug || args.length !== 1) {
+  const positionalArgs =
+    args.filter(
+      (argument) => argument !== '--local',
+    );
+
+  const rawSlug =
+    positionalArgs[0];
+
+  if (
+    !rawSlug ||
+    positionalArgs.length !== 1 ||
+    args.some(
+      (argument) =>
+        argument.startsWith('--') &&
+        argument !== '--local',
+    )
+  ) {
     throw new Error(
-      'uso: ./scripts/hitda publish <slug>',
+      'uso: ./scripts/hitda publish <slug> [--local]',
     );
   }
 
@@ -282,7 +310,34 @@ export function publishArticle(
   }
 
   validateNoPlaceholders(originalContent);
-  validateHeroAssets(frontmatter, root);
+
+  const assetPaths =
+    validateHeroAssets(
+      frontmatter,
+      root,
+    );
+
+  const title =
+    parseYamlScalar(
+      getTopLevelField(
+        frontmatter,
+        'title',
+      ) ?? '',
+    );
+
+  if (!title) {
+    throw new Error(
+      'título do artigo não encontrado.',
+    );
+  }
+
+  if (!localOnly) {
+    prepareArticleRelease({
+      root,
+      articlePath,
+      assetPaths,
+    });
+  }
 
   const publishedContent =
     originalContent.replace(
@@ -351,8 +406,48 @@ export function publishArticle(
   console.log(`Artigo: ${slug}`);
   console.log(`Rota: /${section}/${slug}/`);
   console.log('Estado: draft false');
+
+  if (localOnly) {
+    console.log('');
+    console.log(
+      'Modo local: nenhum commit ou push foi executado.',
+    );
+
+    return {
+      slug,
+      title,
+      section,
+      articlePath,
+      assetPaths,
+      localOnly: true,
+    };
+  }
+
   console.log('');
-  console.log(
-    'O artigo ainda não foi commitado nem enviado ao GitHub.',
-  );
+  console.log('Preparando publicação remota...');
+
+  const release =
+    await releaseArticle({
+      root,
+      slug,
+      title,
+      section,
+      articlePath,
+      assetPaths,
+    });
+
+  console.log('');
+  console.log('Publicação concluída.');
+  console.log(`Commit: ${release.commit}`);
+  console.log(`URL: ${release.publicUrl}`);
+
+  return {
+    slug,
+    title,
+    section,
+    articlePath,
+    assetPaths,
+    localOnly: false,
+    ...release,
+  };
 }

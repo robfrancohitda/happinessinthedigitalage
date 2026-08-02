@@ -244,7 +244,7 @@ async function main() {
       } = await import('./editorial-publish.mjs');
 
       try {
-        publishArticle(
+        await publishArticle(
           process.argv.slice(3),
           root,
         );
@@ -271,7 +271,7 @@ Available:
   ./scripts/hitda check
   ./scripts/hitda audit
   ./scripts/hitda new <type> <slug or subject>
-  ./scripts/hitda publish <slug>
+  ./scripts/hitda publish <slug> [--local]
   ./scripts/hitda verify <url>
 `);
       return;
