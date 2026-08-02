@@ -32,8 +32,9 @@ export const commercialArticleSchema = z.object({
   placements: z
     .array(z.enum(commercialPlacements))
     .default([
-      'article-after-intro',
-      'article-midpoint',
-      'article-after-content',
+      'article-masthead',
+      'article-inline-text',
+      'article-visual-card',
+      'article-final-banner',
     ]),
 });

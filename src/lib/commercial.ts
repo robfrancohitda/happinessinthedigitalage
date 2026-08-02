@@ -21,6 +21,10 @@ export const campaignKinds = [
 ] as const;
 
 export const commercialPlacements = [
+  'article-masthead',
+  'article-inline-text',
+  'article-visual-card',
+  'article-final-banner',
   'article-after-intro',
   'article-inline',
   'article-midpoint',

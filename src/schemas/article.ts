@@ -1,6 +1,7 @@
 import { z } from 'astro/zod';
 
 import { contentTypes } from '../lib/commercial';
+import { articleHeroSchema } from './media';
 import {
   commercialArticleSchema,
   reviewSchema,
@@ -33,8 +34,7 @@ export const articleSchema = z.object({
   draft: z.boolean().default(true),
   featured: z.boolean().default(false),
 
-  image: z.string().optional(),
-  imageAlt: z.string().min(10).max(220).optional(),
+  hero: articleHeroSchema.optional(),
 
   seoTitle: z.string().max(70).optional(),
   socialTitle: z.string().max(90).optional(),
@@ -73,9 +73,19 @@ export const articleSchema = z.object({
     campaignIds: [],
     allowGlobalCampaigns: true,
     placements: [
-      'article-after-intro',
-      'article-midpoint',
-      'article-after-content',
+      'article-masthead',
+      'article-inline-text',
+      'article-visual-card',
+      'article-final-banner',
     ],
   }),
+}).superRefine((article, context) => {
+  if (!article.draft && !article.hero) {
+    context.addIssue({
+      code: 'custom',
+      path: ['hero'],
+      message:
+        'Published articles require desktop and mobile hero images.',
+    });
+  }
 });

@@ -32,7 +32,10 @@ commercial:
     - _technical-campaign-check
   allowGlobalCampaigns: false
   placements:
-    - article-after-content
+    - article-masthead
+    - article-inline-text
+    - article-visual-card
+    - article-final-banner
 ---
 
 This internal draft exists only to validate the HITDA content schema. It must

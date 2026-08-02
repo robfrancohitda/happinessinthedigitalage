@@ -1,11 +1,10 @@
 ---
-import {
-  getCollection,
-  type CollectionEntry,
-} from 'astro:content';
-
 import ArticleCard from '../components/editorial/ArticleCard.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+  getArticlePath,
+  getPublishedArticles,
+} from '../lib/articles';
 import '../styles/home.css';
 
 const title = 'Happiness in the Digital Age';
@@ -41,29 +40,8 @@ const topicAreas = [
 ];
 
 const publishedArticles = (
-  await getCollection('articles', ({ data }) => !data.draft)
-)
-  .sort((first, second) => {
-    const firstDate = first.data.updatedAt ?? first.data.publishedAt;
-    const secondDate = second.data.updatedAt ?? second.data.publishedAt;
-
-    return secondDate.getTime() - firstDate.getTime();
-  })
-  .slice(0, 6);
-
-const routeByType = {
-  guide: 'guides',
-  explainer: 'explainers',
-  review: 'reviews',
-  comparison: 'comparisons',
-  resource: 'resources',
-} as const;
-
-function getArticlePath(
-  article: CollectionEntry<'articles'>,
-): string {
-  return `/${routeByType[article.data.contentType]}/${article.id}/`;
-}
+  await getPublishedArticles()
+).slice(0, 6);
 ---
 
 <BaseLayout title={title} description={description}>
