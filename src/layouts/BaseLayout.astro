@@ -2,6 +2,7 @@
 import SeoHead from '../components/seo/SeoHead.astro';
 import SiteFooter from '../components/site/SiteFooter.astro';
 import SiteHeader from '../components/site/SiteHeader.astro';
+import CookieConsent from '../components/site/CookieConsent.astro';
 import '../styles/global.css';
 import '../styles/site-shell.css';
 
@@ -41,6 +42,41 @@ const {
       noindex={noindex}
       type={type}
     />
+
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+
+      window.gtag =
+        window.gtag ||
+        function () {
+          window.dataLayer.push(arguments);
+        };
+
+      var hitdaConsent = null;
+
+      try {
+        hitdaConsent =
+          localStorage.getItem('hitda-consent-v1');
+      } catch (error) {
+        hitdaConsent = null;
+      }
+
+      var hitdaGranted =
+        hitdaConsent === 'granted';
+
+      window.gtag('consent', 'default', {
+        analytics_storage:
+          hitdaGranted ? 'granted' : 'denied',
+        ad_storage:
+          hitdaGranted ? 'granted' : 'denied',
+        ad_user_data:
+          hitdaGranted ? 'granted' : 'denied',
+        ad_personalization:
+          hitdaGranted ? 'granted' : 'denied',
+        wait_for_update: 500,
+      });
+    </script>
+
   </head>
 
   <body data-page-path={Astro.url.pathname}>
@@ -57,6 +93,8 @@ const {
 
       <SiteFooter />
     </div>
+
+    <CookieConsent />
 
     <script>
       import '../scripts/commercial-tracking';

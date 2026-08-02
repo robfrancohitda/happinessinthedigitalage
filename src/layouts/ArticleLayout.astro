@@ -39,7 +39,7 @@ interface Props {
 const {
   article,
   headings,
-  authorName = 'HITDA Editorial Team',
+  authorName = 'Rob Franco',
   readingTimeMinutes,
   noindex = false,
 } = Astro.props;
@@ -64,6 +64,9 @@ const bodySegments =
 
 const enabledPlacements =
   new Set(data.commercial.placements);
+
+const hasAffiliateRelationship =
+  data.commercial.campaignIds.length > 0;
 
 const adContext = {
   articleId: article.id,
@@ -112,6 +115,15 @@ const adContext = {
         updatedAt={data.updatedAt}
         readingTimeMinutes={readingTimeMinutes}
       />
+
+
+      {
+        hasAffiliateRelationship && (
+          <p class="article-affiliate-note">
+            This page contains affiliate links. HITDA may earn a commission.
+          </p>
+        )
+      }
 
       <div class="article-header__title">
         <h1>{data.title}</h1>
@@ -198,3 +210,13 @@ const adContext = {
     <RelatedArticles articles={relatedArticles} />
   </article>
 </BaseLayout>
+
+
+<style>
+  .article-affiliate-note {
+    margin: 0.75rem 0 0;
+    color: var(--text-soft);
+    font-size: 0.72rem;
+    line-height: 1.45;
+  }
+</style>

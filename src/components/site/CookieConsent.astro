@@ -1,0 +1,212 @@
+<div
+  class="cookie-consent"
+  data-cookie-consent
+  role="dialog"
+  aria-labelledby="cookie-consent-title"
+  aria-describedby="cookie-consent-description"
+  hidden
+>
+  <div class="cookie-consent__content">
+    <div>
+      <p id="cookie-consent-title" class="cookie-consent__title">
+        Cookie preferences
+      </p>
+
+      <p id="cookie-consent-description">
+        We use essential storage for site preferences. Optional analytics
+        and advertising storage will only be enabled with your consent.
+        <a href="/privacy/">Privacy & cookies</a>
+      </p>
+    </div>
+
+    <div class="cookie-consent__actions">
+      <button type="button" data-cookie-reject>
+        Reject optional
+      </button>
+
+      <button
+        class="cookie-consent__accept"
+        type="button"
+        data-cookie-accept
+      >
+        Allow optional
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  type ConsentChoice = 'granted' | 'denied';
+
+  type HitdaWindow = Window & {
+    dataLayer?: unknown[][];
+    gtag?: (...args: unknown[]) => void;
+  };
+
+  const browserWindow = window as HitdaWindow;
+
+  const root =
+    document.querySelector('[data-cookie-consent]');
+
+  const acceptButton =
+    document.querySelector('[data-cookie-accept]');
+
+  const rejectButton =
+    document.querySelector('[data-cookie-reject]');
+
+  const storageKey = 'hitda-consent-v1';
+
+  const updateGoogleConsent = (
+    granted: boolean,
+  ): void => {
+    browserWindow.dataLayer ??= [];
+
+    browserWindow.gtag ??= (...args: unknown[]) => {
+      browserWindow.dataLayer?.push(args);
+    };
+
+    browserWindow.gtag('consent', 'update', {
+      analytics_storage: granted ? 'granted' : 'denied',
+      ad_storage: granted ? 'granted' : 'denied',
+      ad_user_data: granted ? 'granted' : 'denied',
+      ad_personalization: granted ? 'granted' : 'denied',
+    });
+  };
+
+  const saveChoice = (
+    choice: ConsentChoice,
+  ): void => {
+    try {
+      localStorage.setItem(storageKey, choice);
+    } catch {
+      // Preference remains valid for the current page.
+    }
+
+    updateGoogleConsent(choice === 'granted');
+
+    if (root instanceof HTMLElement) {
+      root.hidden = true;
+    }
+  };
+
+  let storedChoice: string | null = null;
+
+  try {
+    storedChoice = localStorage.getItem(storageKey);
+  } catch {
+    storedChoice = null;
+  }
+
+  if (storedChoice === 'granted') {
+    updateGoogleConsent(true);
+  } else if (storedChoice === 'denied') {
+    updateGoogleConsent(false);
+  } else if (root instanceof HTMLElement) {
+    root.hidden = false;
+  }
+
+  acceptButton?.addEventListener(
+    'click',
+    () => saveChoice('granted'),
+  );
+
+  rejectButton?.addEventListener(
+    'click',
+    () => saveChoice('denied'),
+  );
+</script>
+
+<style>
+  .cookie-consent[hidden] {
+    display: none;
+  }
+
+  .cookie-consent {
+    position: fixed;
+    z-index: 1000;
+    right: 1rem;
+    bottom: 1rem;
+    left: 1rem;
+    max-width: 980px;
+    margin-inline: auto;
+    padding: 1rem;
+    color: #f8f8f5;
+    background: #181816;
+    border: 1px solid rgb(255 255 255 / 18%);
+    box-shadow: 0 18px 60px rgb(0 0 0 / 32%);
+  }
+
+  .cookie-consent__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+  }
+
+  .cookie-consent__title {
+    margin: 0 0 0.3rem;
+    color: #fff;
+    font-weight: 800;
+  }
+
+  .cookie-consent p {
+    max-width: 660px;
+    margin-top: 0;
+    margin-bottom: 0;
+    color: rgb(255 255 255 / 76%);
+    font-size: 0.8rem;
+    line-height: 1.55;
+  }
+
+  .cookie-consent a {
+    color: #fff;
+    text-underline-offset: 3px;
+  }
+
+  .cookie-consent__actions {
+    display: flex;
+    flex-shrink: 0;
+    gap: 0.65rem;
+  }
+
+  .cookie-consent button {
+    min-height: 42px;
+    padding: 0.65rem 0.9rem;
+    color: #fff;
+    background: transparent;
+    border: 1px solid rgb(255 255 255 / 35%);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: 750;
+  }
+
+  .cookie-consent button:hover,
+  .cookie-consent button:focus-visible {
+    border-color: #fff;
+  }
+
+  .cookie-consent .cookie-consent__accept {
+    color: #181816;
+    background: #fff;
+    border-color: #fff;
+  }
+
+  @media (max-width: 720px) {
+    .cookie-consent {
+      right: 0.7rem;
+      bottom: 0.7rem;
+      left: 0.7rem;
+    }
+
+    .cookie-consent__content,
+    .cookie-consent__actions {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .cookie-consent__actions {
+      width: 100%;
+    }
+  }
+</style>

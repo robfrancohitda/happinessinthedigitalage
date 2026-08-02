@@ -1,0 +1,41 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import '../styles/legal.css';
+
+interface Props {
+  title: string;
+  description: string;
+  eyebrow?: string;
+}
+
+const {
+  title,
+  description,
+  eyebrow = 'Information',
+} = Astro.props;
+---
+
+<BaseLayout
+  title={`${title} | Happiness in the Digital Age`}
+  description={description}
+>
+  <section class="legal-page">
+    <div class="legal-page__inner">
+      <p class="legal-page__eyebrow">{eyebrow}</p>
+
+      <h1>{title}</h1>
+
+      <p class="legal-page__description">
+        {description}
+      </p>
+
+      <p class="legal-page__updated">
+        Last updated August 2, 2026
+      </p>
+
+      <div class="legal-page__content">
+        <slot />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

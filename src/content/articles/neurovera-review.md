@@ -21,6 +21,7 @@ hero:
     height: 1350
 
 publishedAt: 2026-08-02
+updatedAt: 2026-08-02
 
 contentType: review
 vertical: health-and-wellbeing
@@ -40,7 +41,7 @@ audience:
   - "Adults researching NeuroVera or comparing memory-support supplements"
   - "Readers who want to separate seller claims from independently verifiable product information"
 
-authorId: hitda-editorial-team
+authorId: emily-carter
 
 draft: false
 featured: false

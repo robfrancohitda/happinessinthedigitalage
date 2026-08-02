@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 
 import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { getAuthorName } from '../../data/authors';
 
 import type {
   ArticleEntry,
@@ -17,11 +18,14 @@ const {
   Content,
   headings,
 } = await render(article);
+
+const authorName = getAuthorName(article.data.authorId);
 ---
 
 <ArticleLayout
   article={article}
   headings={headings}
+  authorName={authorName}
 >
   <Content />
 </ArticleLayout>

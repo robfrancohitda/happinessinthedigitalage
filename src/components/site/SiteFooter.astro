@@ -6,6 +6,17 @@ const navigation = [
   { href: '/#latest', label: 'Latest' },
   { href: '/#what-to-expect', label: 'What to expect' },
 ];
+
+const information = [
+  { href: '/contact/', label: 'Contact' },
+  { href: '/privacy/', label: 'Privacy & cookies' },
+  { href: '/terms/', label: 'Terms of use' },
+  {
+    href: '/affiliate-disclosure/',
+    label: 'Affiliate disclosure',
+  },
+  { href: '/sitemap-index.xml', label: 'Sitemap' },
+];
 ---
 
 <footer class="site-footer">
@@ -21,7 +32,10 @@ const navigation = [
       </p>
     </div>
 
-    <nav class="site-footer__navigation" aria-label="Footer navigation">
+    <nav
+      class="site-footer__navigation"
+      aria-label="Footer navigation"
+    >
       <p class="site-footer__heading">Navigate</p>
 
       {
@@ -31,18 +45,25 @@ const navigation = [
       }
     </nav>
 
-    <div class="site-footer__information">
+    <nav
+      class="site-footer__information"
+      aria-label="Site information"
+    >
       <p class="site-footer__heading">Information</p>
-      <a href="/sitemap-index.xml">Sitemap</a>
-      <a href="/robots.txt">Robots</a>
-    </div>
+
+      {
+        information.map((item) => (
+          <a href={item.href}>{item.label}</a>
+        ))
+      }
+    </nav>
   </div>
 
   <div class="site-footer__legal">
-    <p>© {year} Happiness in the Digital Age.</p>
+    <p>© {year} HITDA. All rights reserved.</p>
 
     <p>
-      Some pages may contain paid links. Editorial decisions remain
+      Some pages contain affiliate links. Editorial conclusions remain
       independent.
     </p>
   </div>

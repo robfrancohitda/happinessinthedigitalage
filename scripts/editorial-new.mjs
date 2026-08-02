@@ -146,7 +146,7 @@ primaryIntent: ${quoteYaml(primaryIntent)}
 audience:
   - "Readers seeking practical guidance on this subject"
 
-authorId: hitda-editorial-team
+authorId: rob-franco
 
 draft: true
 featured: false
