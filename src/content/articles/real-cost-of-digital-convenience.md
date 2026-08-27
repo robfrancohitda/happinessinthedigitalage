@@ -87,7 +87,8 @@ review:
 
 commercial:
   relatedProductIds: []
-  campaignIds: []
+  campaignIds:
+    - neurovera-us-contextual
   allowGlobalCampaigns: false
   placements:
     - article-masthead
