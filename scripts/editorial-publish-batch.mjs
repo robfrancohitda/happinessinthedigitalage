@@ -430,9 +430,23 @@ export async function publishArticleBatch(
   console.log(`Total: ${items.length}`);
 
   if (localOnly) {
+    for (const item of items) {
+      writeFileSync(
+        item.articlePath,
+        item.originalContent,
+        'utf8',
+      );
+    }
+
     console.log('');
     console.log(
-      'Modo local: nenhum commit ou push foi executado.',
+      'Modo local: fontes restaurados para draft: true.',
+    );
+    console.log(
+      'O dist preserva as rotas publicáveis para preview.',
+    );
+    console.log(
+      'Nenhum commit ou push foi executado.',
     );
 
     return {
