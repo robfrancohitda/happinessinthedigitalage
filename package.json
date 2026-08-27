@@ -15,6 +15,7 @@
     "hitda:publish-batch": "./scripts/hitda publish-batch",
     "hitda:check": "./scripts/hitda check",
     "hitda:audit": "./scripts/hitda audit",
+    "hitda:inventory": "./scripts/hitda inventory",
     "hitda:verify": "./scripts/hitda verify"
   },
   "dependencies": {

@@ -161,7 +161,7 @@ function check() {
   run('npm', ['run', 'build']);
 }
 
-function audit() {
+async function audit() {
   console.log('\n=== AUDITORIA HITDA ===');
 
   validateRequiredFiles();
@@ -170,7 +170,55 @@ function audit() {
   console.log('Estrutura obrigatória: OK');
   console.log('Sanitização de referências: OK');
 
+  const {
+    validateEditorialCatalog,
+    validateBuiltEditorialOutput,
+  } = await import('./editorial-inventory.mjs');
+
+  const editorial =
+    validateEditorialCatalog(root);
+
+  if (editorial.errors.length > 0) {
+    fail(
+      'falhas editoriais estruturais:\n' +
+      editorial.errors
+        .map(
+          (finding) =>
+            `[${finding.slug}] ${finding.message}`,
+        )
+        .join('\n'),
+    );
+  }
+
+  console.log(
+    `Catálogo editorial: OK (${editorial.warnings.length} aviso(s))`,
+  );
+
+  for (const warning of editorial.warnings) {
+    console.log(
+      `AVISO [${warning.slug}] ${warning.message}`,
+    );
+  }
+
   check();
+
+  const built =
+    validateBuiltEditorialOutput(root);
+
+  if (built.errors.length > 0) {
+    fail(
+      'falhas na saída gerada:\n' +
+      built.errors
+        .map(
+          (finding) =>
+            `[${finding.slug}] ${finding.message}`,
+        )
+        .join('\n'),
+    );
+  }
+
+  console.log('Links internos gerados: OK');
+  console.log('Sitemap editorial: OK');
 
   console.log('\nAuditoria HITDA concluída.');
 }
@@ -499,8 +547,17 @@ async function main() {
       return;
 
     case 'audit':
-      audit();
+      await audit();
       return;
+
+    case 'inventory': {
+      const {
+        printEditorialInventory,
+      } = await import('./editorial-inventory.mjs');
+
+      printEditorialInventory(root);
+      return;
+    }
 
     case 'new': {
       const {
@@ -576,6 +633,7 @@ HITDA operational interface
 Available:
   ./scripts/hitda check
   ./scripts/hitda audit
+  ./scripts/hitda inventory
   ./scripts/hitda new <type> <slug or subject>
   ./scripts/hitda publish <slug> [--local]
   ./scripts/hitda publish-batch <slug> <slug>... [--local]
