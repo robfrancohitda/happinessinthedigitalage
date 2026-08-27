@@ -12,6 +12,7 @@
     "hitda": "./scripts/hitda",
     "hitda:new": "./scripts/hitda new",
     "hitda:publish": "./scripts/hitda publish",
+    "hitda:publish-batch": "./scripts/hitda publish-batch",
     "hitda:check": "./scripts/hitda check",
     "hitda:audit": "./scripts/hitda audit",
     "hitda:verify": "./scripts/hitda verify"

@@ -24,7 +24,7 @@ publishedAt: 2026-08-02
 updatedAt: 2026-08-02
 
 contentType: review
-vertical: health-and-wellbeing
+vertical: wellbeing
 category: brain-health-supplements
 topic: neurovera-review
 

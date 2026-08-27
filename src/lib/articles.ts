@@ -115,6 +115,7 @@ export async function getRelatedArticles(
 
       return { article, score };
     })
+    .filter(({ score }) => score > 0)
     .sort((first, second) => {
       if (second.score !== first.score) {
         return second.score - first.score;

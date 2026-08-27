@@ -544,6 +544,27 @@ async function main() {
       return;
     }
 
+    case 'publish-batch': {
+      const {
+        publishArticleBatch,
+      } = await import('./editorial-publish-batch.mjs');
+
+      try {
+        await publishArticleBatch(
+          process.argv.slice(3),
+          root,
+        );
+      } catch (error) {
+        fail(
+          error instanceof Error
+            ? error.message
+            : String(error),
+        );
+      }
+
+      return;
+    }
+
     case 'verify':
       await verify();
       return;
@@ -557,6 +578,7 @@ Available:
   ./scripts/hitda audit
   ./scripts/hitda new <type> <slug or subject>
   ./scripts/hitda publish <slug> [--local]
+  ./scripts/hitda publish-batch <slug> <slug>... [--local]
   ./scripts/hitda verify <url> [expected title]
 `);
       return;

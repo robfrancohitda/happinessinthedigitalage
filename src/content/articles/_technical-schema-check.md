@@ -4,7 +4,7 @@ description: "Internal draft used to validate the editorial, review and commerci
 answerSummary: "This unpublished document validates the structured fields used by the HITDA editorial and commercial publishing system."
 publishedAt: 2026-08-01
 contentType: explainer
-vertical: digital-life
+vertical: technology
 category: technical-foundation
 topic: editorial-architecture
 tags:

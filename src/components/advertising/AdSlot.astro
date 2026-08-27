@@ -10,11 +10,15 @@ import {
   type Placement,
 } from '../../lib/campaign-selection';
 
+import type {
+  EditorialVertical,
+} from '../../lib/editorial-taxonomy';
+
 interface Props {
   placement: Placement;
   articleId?: string;
   contentType?: ContentType;
-  vertical?: string;
+  vertical?: EditorialVertical;
   category?: string;
   topic?: string;
   tags?: string[];

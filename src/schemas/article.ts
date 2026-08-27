@@ -1,6 +1,8 @@
 import { z } from 'astro/zod';
 
+import { authorIds } from '../data/authors';
 import { contentTypes } from '../lib/commercial';
+import { editorialVerticals } from '../lib/editorial-taxonomy';
 import { articleHeroSchema } from './media';
 import {
   commercialArticleSchema,
@@ -24,7 +26,7 @@ export const articleSchema = z.object({
   updatedAt: z.coerce.date().optional(),
 
   contentType: z.enum(contentTypes),
-  vertical: z.string().min(2).max(80),
+  vertical: z.enum(editorialVerticals),
   category: z.string().min(2).max(80),
   topic: z.string().min(2).max(100).optional(),
   tags: z.array(z.string().min(2).max(60)).default([]),
@@ -33,9 +35,7 @@ export const articleSchema = z.object({
   audience: z.array(z.string().min(5).max(180)).default([]),
 
   authorId: z
-    .string()
-    .min(2)
-    .max(100)
+    .enum(authorIds)
     .default('hitda-editorial-team'),
 
   draft: z.boolean().default(true),

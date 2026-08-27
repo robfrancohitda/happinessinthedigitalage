@@ -5,6 +5,10 @@ import {
   contentTypes,
 } from './commercial';
 
+import type {
+  EditorialVertical,
+} from './editorial-taxonomy';
+
 export type CampaignEntry = CollectionEntry<'campaigns'>;
 export type Placement =
   (typeof commercialPlacements)[number];
@@ -17,7 +21,7 @@ export interface CampaignContext {
   placement: Placement;
   articleId?: string;
   contentType?: ContentType;
-  vertical?: string;
+  vertical?: EditorialVertical;
   category?: string;
   topic?: string;
   tags?: string[];

@@ -1,4 +1,19 @@
-export const authors = {
+export const authorIds = [
+  'rob-franco',
+  'claire-bennett',
+  'emily-carter',
+  'hitda-editorial-team',
+] as const;
+
+export type AuthorId = (typeof authorIds)[number];
+
+export const authors: Record<
+  AuthorId,
+  {
+    name: string;
+    beats: readonly string[];
+  }
+> = {
   'rob-franco': {
     name: 'Rob Franco',
     beats: [
@@ -31,10 +46,18 @@ export const authors = {
       'lifestyle',
     ],
   },
-} as const;
 
-export type AuthorId = keyof typeof authors;
+  'hitda-editorial-team': {
+    name: 'HITDA Editorial Team',
+    beats: [
+      'institutional coverage',
+      'cross-vertical explainers',
+      'resources',
+      'editorial operations',
+    ],
+  },
+};
 
-export function getAuthorName(authorId: string): string {
-  return authors[authorId as AuthorId]?.name ?? 'Rob Franco';
+export function getAuthorName(authorId: AuthorId): string {
+  return authors[authorId].name;
 }

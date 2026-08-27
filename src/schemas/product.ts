@@ -1,6 +1,7 @@
 import { z } from 'astro/zod';
 
 import { productStatuses } from '../lib/commercial';
+import { editorialVerticals } from '../lib/editorial-taxonomy';
 
 export const productSchema = z.object({
   name: z.string().min(2).max(160),
@@ -12,7 +13,7 @@ export const productSchema = z.object({
   publicSummary: z.string().min(30).max(500),
   destinationUrl: z.url(),
 
-  verticals: z.array(z.string().min(2).max(80)).default([]),
+  verticals: z.array(z.enum(editorialVerticals)).default([]),
   categories: z.array(z.string().min(2).max(80)).default([]),
   topics: z.array(z.string().min(2).max(100)).default([]),
 

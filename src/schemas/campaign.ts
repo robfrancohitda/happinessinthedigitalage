@@ -8,6 +8,7 @@ import {
   contentTypes,
   offerRelationships,
 } from '../lib/commercial';
+import { editorialVerticals } from '../lib/editorial-taxonomy';
 
 const creativeImageSchema = z.object({
   src: z.string().min(1).max(300),
@@ -95,7 +96,7 @@ const campaignTargetingSchema = z
       .default([]),
 
     verticals: z
-      .array(z.string().min(2).max(80))
+      .array(z.enum(editorialVerticals))
       .default([]),
 
     categories: z
