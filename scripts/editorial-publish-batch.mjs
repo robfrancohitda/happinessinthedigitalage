@@ -180,9 +180,7 @@ function validateHeroAssets(
     getYamlBlock(frontmatter, 'hero');
 
   if (!heroBlock) {
-    throw new Error(
-      'o artigo não possui hero desktop e mobile.',
-    );
+    return [];
   }
 
   const sources = [

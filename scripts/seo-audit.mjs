@@ -398,6 +398,7 @@ export function validateBuiltSeo(
     }
 
     if (
+      article.heroSources.length > 0 &&
       !getMetaContent(
         html,
         'property',
@@ -407,7 +408,7 @@ export function validateBuiltSeo(
       addError(
         errors,
         article.slug,
-        'og:image ausente.',
+        'og:image ausente para artigo que possui hero.',
       );
     }
 

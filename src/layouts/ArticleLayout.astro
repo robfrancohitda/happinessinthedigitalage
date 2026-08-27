@@ -49,12 +49,6 @@ const {
 
 const { data } = article;
 
-if (!data.hero) {
-  throw new Error(
-    `Article "${article.id}" cannot use ArticleLayout without hero images.`,
-  );
-}
-
 const openingContext = data.openingContext ?? [];
 
 const relatedArticles = await getRelatedArticles(article, 3);
@@ -106,8 +100,8 @@ const structuredData =
   title={data.seoTitle ?? data.title}
   description={data.description}
   canonical={canonicalUrl}
-  image={data.hero.desktop.src}
-  imageAlt={data.hero.alt}
+  image={data.hero?.desktop.src}
+  imageAlt={data.hero?.alt}
   socialTitle={data.socialTitle}
   socialDescription={data.socialDescription}
   type="article"
@@ -157,9 +151,13 @@ const structuredData =
       </div>
     </header>
 
-    <div class="article-hero-container">
-      <ArticleHero hero={data.hero} />
-    </div>
+    {
+      data.hero && (
+        <div class="article-hero-container">
+          <ArticleHero hero={data.hero} />
+        </div>
+      )
+    }
 
     <div class="article-reading-column">
       {

@@ -648,17 +648,6 @@ export function validateEditorialCatalog(
         );
       }
 
-      if (
-        article.heroSources.length < 2
-      ) {
-        addFinding(
-          findings,
-          'error',
-          article.slug,
-          'artigo publicado sem os dois heroes.',
-        );
-      }
-
       for (
         const asset of article.heroAssets
       ) {

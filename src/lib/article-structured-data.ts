@@ -24,12 +24,6 @@ Record<string, unknown> {
     data,
   } = article;
 
-  if (!data.hero) {
-    throw new Error(
-      `Article "${article.id}" requires hero images for structured data.`,
-    );
-  }
-
   const articlePath =
     getArticlePath(article);
 
@@ -57,10 +51,12 @@ Record<string, unknown> {
     ).toString();
 
   const imageUrl =
-    new URL(
-      data.hero.desktop.src,
-      baseUrl,
-    ).toString();
+    data.hero
+      ? new URL(
+          data.hero.desktop.src,
+          baseUrl,
+        ).toString()
+      : undefined;
 
   const publishedAt =
     data.publishedAt.toISOString();
@@ -125,11 +121,15 @@ Record<string, unknown> {
       breadcrumb: {
         '@id': breadcrumbId,
       },
-      primaryImageOfPage: {
-        '@type':
-          'ImageObject',
-        url: imageUrl,
-      },
+      ...(imageUrl
+        ? {
+            primaryImageOfPage: {
+              '@type':
+                'ImageObject',
+              url: imageUrl,
+            },
+          }
+        : {}),
       inLanguage: 'en',
     },
 
@@ -173,9 +173,13 @@ Record<string, unknown> {
       mainEntityOfPage: {
         '@id': pageId,
       },
-      image: [
-        imageUrl,
-      ],
+      ...(imageUrl
+        ? {
+            image: [
+              imageUrl,
+            ],
+          }
+        : {}),
       datePublished:
         publishedAt,
       dateModified:

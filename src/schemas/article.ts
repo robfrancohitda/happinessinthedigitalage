@@ -87,15 +87,6 @@ export const articleSchema = z.object({
     ],
   }),
 }).superRefine((article, context) => {
-  if (!article.draft && !article.hero) {
-    context.addIssue({
-      code: 'custom',
-      path: ['hero'],
-      message:
-        'Published articles require desktop and mobile hero images.',
-    });
-  }
-
   if (!article.draft && !article.openingContext) {
     context.addIssue({
       code: 'custom',
