@@ -220,6 +220,29 @@ async function audit() {
   console.log('Links internos gerados: OK');
   console.log('Sitemap editorial: OK');
 
+  const {
+    validateBuiltSeo,
+  } = await import('./seo-audit.mjs');
+
+  const seo =
+    validateBuiltSeo(root);
+
+  if (seo.errors.length > 0) {
+    fail(
+      'falhas de SEO semântico:\n' +
+      seo.errors
+        .map(
+          (finding) =>
+            `[${finding.slug}] ${finding.message}`,
+        )
+        .join('\n'),
+    );
+  }
+
+  console.log(
+    'SEO semântico e structured data: OK',
+  );
+
   console.log('\nAuditoria HITDA concluída.');
 }
 
@@ -442,9 +465,9 @@ async function verify() {
       'og:title',
     );
 
-  if (ogTitle !== documentTitle) {
+  if (!ogTitle) {
     fail(
-      'og:title não corresponde ao título SEO.',
+      'og:title não encontrado.',
     );
   }
 
@@ -455,9 +478,42 @@ async function verify() {
       'twitter:title',
     );
 
-  if (twitterTitle !== documentTitle) {
+  if (!twitterTitle) {
     fail(
-      'twitter:title não corresponde ao título SEO.',
+      'twitter:title não encontrado.',
+    );
+  }
+
+  if (
+    twitterTitle !== ogTitle
+  ) {
+    fail(
+      'twitter:title não corresponde ao og:title.',
+    );
+  }
+
+  const ogDescription =
+    getMetaContent(
+      html,
+      'property',
+      'og:description',
+    );
+
+  const twitterDescription =
+    getMetaContent(
+      html,
+      'name',
+      'twitter:description',
+    );
+
+  if (
+    !ogDescription ||
+    !twitterDescription ||
+    ogDescription !==
+      twitterDescription
+  ) {
+    fail(
+      'descrições sociais ausentes ou divergentes.',
     );
   }
 
@@ -493,6 +549,35 @@ async function verify() {
     fail(
       'a página publicada contém noindex.',
     );
+  }
+
+  const ogType =
+    getMetaContent(
+      html,
+      'property',
+      'og:type',
+    );
+
+  if (
+    ogType === 'article'
+  ) {
+    const hasJsonLd =
+      /<script\b[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/i
+        .test(html);
+
+    const hasArticleNode =
+      html.includes(
+        '"@type":"Article"',
+      );
+
+    if (
+      !hasJsonLd ||
+      !hasArticleNode
+    ) {
+      fail(
+        'structured data Article não encontrado na página publicada.',
+      );
+    }
   }
 
   let heading;
@@ -532,6 +617,12 @@ async function verify() {
   console.log(
     'Metadados sociais: OK',
   );
+
+  if (ogType === 'article') {
+    console.log(
+      'Structured data Article: OK',
+    );
+  }
 
   console.log(
     'Indexação permitida: OK',

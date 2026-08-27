@@ -11,8 +11,14 @@ interface Props {
   description: string;
   canonical?: string;
   image?: string;
+  imageAlt?: string;
+  socialTitle?: string;
+  socialDescription?: string;
   noindex?: boolean;
   type?: 'website' | 'article';
+  publishedAt?: Date;
+  updatedAt?: Date;
+  structuredData?: Record<string, unknown>;
 }
 
 const {
@@ -20,8 +26,14 @@ const {
   description,
   canonical,
   image,
+  imageAlt,
+  socialTitle,
+  socialDescription,
   noindex = false,
   type = 'website',
+  publishedAt,
+  updatedAt,
+  structuredData,
 } = Astro.props;
 ---
 
@@ -42,8 +54,14 @@ const {
       description={description}
       canonical={canonical}
       image={image}
+      imageAlt={imageAlt}
+      socialTitle={socialTitle}
+      socialDescription={socialDescription}
       noindex={noindex}
       type={type}
+      publishedAt={publishedAt}
+      updatedAt={updatedAt}
+      structuredData={structuredData}
     />
 
     <script is:inline>

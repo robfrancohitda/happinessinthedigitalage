@@ -5,6 +5,10 @@ import {
 } from '../lib/articles';
 
 import {
+  buildArticleStructuredData,
+} from '../lib/article-structured-data';
+
+import {
   splitArticleBodyHtml,
 } from '../lib/article-body-segmentation';
 
@@ -79,13 +83,37 @@ const adContext = {
   allowGlobalCampaigns:
     data.commercial.allowGlobalCampaigns,
 };
+
+const baseUrl =
+  Astro.site ??
+  new URL(Astro.url.origin);
+
+const canonicalUrl =
+  new URL(
+    Astro.url.pathname,
+    baseUrl,
+  ).toString();
+
+const structuredData =
+  buildArticleStructuredData({
+    article,
+    authorName,
+    baseUrl,
+  });
 ---
 
 <BaseLayout
   title={data.seoTitle ?? data.title}
   description={data.description}
+  canonical={canonicalUrl}
   image={data.hero.desktop.src}
+  imageAlt={data.hero.alt}
+  socialTitle={data.socialTitle}
+  socialDescription={data.socialDescription}
   type="article"
+  publishedAt={data.publishedAt}
+  updatedAt={data.updatedAt}
+  structuredData={structuredData}
   noindex={noindex}
 >
   <article class="article-page">

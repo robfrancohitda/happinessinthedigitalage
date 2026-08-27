@@ -210,6 +210,30 @@ function parseArticleFile(
       ),
     );
 
+  const seoTitle =
+    parseYamlScalar(
+      getTopLevelField(
+        frontmatter,
+        'seoTitle',
+      ),
+    );
+
+  const socialTitle =
+    parseYamlScalar(
+      getTopLevelField(
+        frontmatter,
+        'socialTitle',
+      ),
+    );
+
+  const socialDescription =
+    parseYamlScalar(
+      getTopLevelField(
+        frontmatter,
+        'socialDescription',
+      ),
+    );
+
   const contentType =
     parseYamlScalar(
       getTopLevelField(
@@ -358,6 +382,9 @@ function parseArticleFile(
       slug.startsWith('_'),
     title,
     description,
+    seoTitle,
+    socialTitle,
+    socialDescription,
     contentType,
     vertical,
     category,
